@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desa Banyusri - Pengaduan Online</title>
+    <link rel="stylesheet" href="css/pengaduan.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">🏘️</div>
+                <div class="header-text">
+                    <h1>DESA BANYUSRI</h1>
+                    <p>Kecamatan Wonosegoro, Kabupaten Boyolali</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-item">🏠 Beranda</a>
+            <a href="profil.html" class="nav-item">📋 Profil Desa</a>
+            <a href="#" class="nav-item active">📢 Pengaduan</a>
+            <a href="kontak.html" class="nav-item">📞 Kontak</a>
+        </div>
+    </nav>
+
+    <!-- Pengaduan Page Content -->
+    <div class="page-content active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2>📢 Layanan Pengaduan Online</h2>
+                <p>Sampaikan keluhan, saran, dan aspirasi Anda untuk kemajuan Desa Banyusri</p>
+                <div class="hero-buttons">
+                    <a href="#form-pengaduan" class="btn btn-primary">📝 Buat Pengaduan</a>
+                    <a href="#info-layanan" class="btn btn-secondary">ℹ️ Info Layanan</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="content">
+            <!-- Informasi Layanan -->
+            <section class="section" id="info-layanan">
+                <h2>Informasi Layanan Pengaduan</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">📝</div>
+                        <h3>Mudah Digunakan</h3>
+                        <p>Form pengaduan yang sederhana dan mudah dipahami oleh semua kalangan masyarakat.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">⏰</div>
+                        <h3>Respons Cepat</h3>
+                        <p>Pengaduan akan ditanggapi dalam waktu maksimal 1x24 jam kerja.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔒</div>
+                        <h3>Terjamin Privasi</h3>
+                        <p>Data pribadi Anda akan dijaga kerahasiaannya sesuai ketentuan yang berlaku.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📧</div>
+                        <h3>Langsung ke Email</h3>
+                        <p>Pengaduan langsung dikirim ke email resmi balai desa untuk penanganan cepat.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jenis Pengaduan -->
+            <section class="section">
+                <h2>Jenis Pengaduan</h2>
+                <div class="complaint-types">
+                    <div class="type-item">🏗️ Infrastruktur Desa</div>
+                    <div class="type-item">🏛️ Pelayanan Publik</div>
+                    <div class="type-item">🌱 Lingkungan Hidup</div>
+                    <div class="type-item">🛡️ Keamanan & Ketertiban</div>
+                    <div class="type-item">📄 Administrasi Kependudukan</div>
+                    <div class="type-item">📋 Lainnya</div>
+                </div>
+            </section>
+
+            <!-- Alur Pengaduan -->
+            <section class="section">
+                <h2>Alur Pengaduan</h2>
+                <div class="process-steps">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Isi Form Pengaduan</h3>
+                            <p>Lengkapi form pengaduan dengan data yang akurat dan jelas</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Kirim Pengaduan</h3>
+                            <p>Pengaduan akan dikirim langsung ke email resmi balai desa</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Verifikasi Data</h3>
+                            <p>Petugas akan memverifikasi dan menindaklanjuti pengaduan Anda</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Tindak Lanjut</h3>
+                            <p>Anda akan dihubungi untuk update perkembangan pengaduan</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Form Pengaduan -->
+            <section class="section" id="form-pengaduan">
+                <h2>Form Pengaduan Online</h2>
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3>📝 Formulir Pengaduan Masyarakat</h3>
+                        <p>Silakan isi form di bawah ini dengan lengkap dan jelas</p>
+                    </div>
+
+                    <div id="alert-container"></div>
+
+            <form id="complaint-form" class="complaint-form">
+            <!-- Nama, NIK, Telepon tetap seperti biasa -->
+            <div class="form-group">
+            <label for="nama">Nama Lengkap *</label>
+            <input type="text" id="nama" name="nama" required>
+            </div>
+
+            <div class="form-group">
+            <label for="nik">NIK *</label>
+            <input type="text" id="nik" name="nik" required maxlength="16">
+            </div>
+
+            <div class="form-group">
+            <label for="telepon">No. Telepon *</label>
+            <input type="tel" id="telepon" name="telepon" required>
+            </div>
+
+            <!-- Tambahan Email + OTP -->
+            <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required placeholder="email@contoh.com">
+            <button type="button" id="btn-kirim-otp" class="btn btn-secondary" style="margin-top: 10px">🔐 Kirim Kode Verifikasi</button>
+            <div id="otp-section" style="display:none; margin-top: 10px;">
+                <label for="otp">Masukkan Kode OTP *</label>
+                <input type="text" id="otp" placeholder="6 digit kode" maxlength="6">
+                <button type="button" id="btn-verifikasi-otp" class="btn btn-primary" style="margin-top: 10px">✅ Verifikasi OTP</button>
+            </div>
+            </div>
+
+            <!-- Alamat, Jenis Pengaduan, dll -->
+            <div class="form-group">
+            <label for="alamat">Alamat *</label>
+            <input type="text" id="alamat" name="alamat" required>
+            </div>
+
+            <div class="form-group">
+            <label for="jenis_pengaduan">Jenis Pengaduan *</label>
+            <select id="jenis_pengaduan" name="jenis_pengaduan" required>
+                <option value="">-- Pilih --</option>
+                <option value="infrastruktur">Infrastruktur</option>
+                <option value="pelayanan">Pelayanan Publik</option>
+                <option value="keamanan">Keamanan</option>
+            </select>
+            </div>
+
+            <div class="form-group">
+            <label for="judul_pengaduan">Judul *</label>
+            <input type="text" id="judul_pengaduan" name="judul_pengaduan" required>
+            </div>
+
+            <div class="form-group">
+            <label for="isi_pengaduan">Isi Pengaduan *</label>
+            <textarea id="isi_pengaduan" name="isi_pengaduan" required></textarea>
+            </div>
+
+            <div class="form-group">
+            <label for="harapan">Harapan/Saran</label>
+            <textarea id="harapan" name="harapan"></textarea>
+            </div>
+
+            <div class="button-group">
+            <button type="submit" class="btn btn-primary">📤 Kirim Pengaduan</button>
+            <button type="reset" class="btn btn-secondary">🔄 Reset</button>
+            </div>
+        </form>
+
+        <div id="alert-container"></div>
+                    <div id="loading" class="loading">
+                        <div class="spinner"></div>
+                        <p>Memproses pengaduan Anda...</p>
+                    </div>
+                </div>
+
+            <!-- Kontak Langsung -->
+            <section class="section">
+                <h2>Kontak Langsung</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">📞</div>
+                        <h3>Telepon Balai Desa</h3>
+                        <p><strong>(0276) 123456</strong></p>
+                        <p>Senin - Jumat: 08:00 - 15:00 WIB</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📱</div>
+                        <h3>WhatsApp</h3>
+                        <p><strong>0812-3456-7890</strong></p>
+                        <p>Untuk pengaduan darurat 24 jam</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📧</div>
+                        <h3>Email Resmi</h3>
+                        <p><strong>pengaduan@banyusri.desa.id</strong></p>
+                        <p>Respon maksimal 1x24 jam</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Beranda</a>
+                <a href="#">Profil Desa</a>
+                <a href="#">Berita</a>
+                <a href="#">Layanan</a>
+                <a href="#">Kontak</a>
+            </div>
+            <p>&copy; 2025 Desa Banyusri, Kecamatan Wonosegoro, Kabupaten Boyolali</p>
+            <p>Jawa Tengah - Indonesia</p>
+        </div>
+    </footer>
+
+    <script>
+    let otpTerverifikasi = false;
+
+        function showAlert(message, type) {
+        const alertContainer = document.getElementById('alert-container');
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
+        alertContainer.innerHTML = '';
+        alertContainer.appendChild(alert);
+        }
+
+        document.getElementById('btn-kirim-otp').addEventListener('click', () => {
+        const email = document.getElementById('email').value.trim();
+        if (!email) return showAlert('Mohon masukkan email terlebih dahulu', 'error');
+
+        fetch('http://localhost:3000/kirim-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+            showAlert(data.message, 'success');
+            document.getElementById('otp-section').style.display = 'block';
+            } else {
+            showAlert(data.message, 'error');
+            }
+        })
+        .catch(() => showAlert('Gagal menghubungi server OTP', 'error'));
+        });
+
+        document.getElementById('btn-verifikasi-otp').addEventListener('click', () => {
+        const email = document.getElementById('email').value.trim();
+        const otp = document.getElementById('otp').value.trim();
+
+        fetch('http://localhost:3000/verifikasi-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+            otpTerverifikasi = true;
+            showAlert('Verifikasi OTP berhasil. Anda dapat mengirim pengaduan.', 'success');
+            } else {
+            showAlert(data.message, 'error');
+            }
+        })
+        .catch(() => showAlert('Gagal memverifikasi OTP', 'error'));
+        });
+
+        document.getElementById('complaint-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (!otpTerverifikasi) {
+            return showAlert('Silakan verifikasi email terlebih dahulu.', 'error');
+        }
+
+        const formData = new FormData(this);
+        const data = {};
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+
+        fetch('http://localhost:3000/kirim-pengaduan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.success) {
+            showAlert('Pengaduan berhasil dikirim!', 'success');
+            this.reset();
+            } else {
+            showAlert(response.message, 'error');
+            }
+        })
+        .catch(() => showAlert('Gagal mengirim pengaduan.', 'error'));
+        });
+        // Function to show alerts
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} show`;
+            alert.innerHTML = message;
+            alertContainer.appendChild(alert);
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 300);
+            }, 5000);
+        }
+        
+        // Generate ticket number
+        function generateTicketNumber() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+            return `BSR${year}${month}${day}${random}`;
+        }
+        
+        // Create email content
+        function createEmailContent(data) {
+            return `
+        PENGADUAN MASYARAKAT DESA BANYUSRI
+        =====================================
+
+        INFORMASI PENGADU:
+        - Nama: ${data.nama}
+        - NIK: ${data.nik}
+        - Telepon: ${data.telepon}
+        - Email: ${data.email || 'Tidak disediakan'}
+        - Alamat: ${data.alamat}
+
+        DETAIL PENGADUAN:
+        - Jenis: ${data.jenis_pengaduan}
+        - Judul: ${data.judul_pengaduan}
+        - Isi Pengaduan: ${data.isi_pengaduan}
+        - Harapan: ${data.harapan || 'Tidak disediakan'}
+
+        Tanggal: ${new Date().toLocaleDateString('id-ID')}
+        Waktu: ${new Date().toLocaleTimeString('id-ID')}
+                    `;
+                }
+                
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Format NIK input (only numbers)
+        document.getElementById('nik').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+        
+        // Format phone number
+        document.getElementById('telepon').addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            if (value.startsWith('62')) {
+                value = '0' + value.substring(2);
+            }
+            this.value = value;
+        });
+        
+        // Character counter for textareas
+        document.querySelectorAll('textarea').forEach(textarea => {
+            const maxLength = textarea.getAttribute('maxlength');
+            if (maxLength) {
+                const counter = document.createElement('div');
+                counter.style.cssText = 'text-align: right; font-size: 0.8rem; color: #666; margin-top: 5px;';
+                counter.textContent = '0/' + maxLength;
+                textarea.parentNode.appendChild(counter);
+                
+                textarea.addEventListener('input', function() {
+                    counter.textContent = this.value.length + '/' + maxLength;
+                    if (this.value.length > maxLength * 0.9) {
+                        counter.style.color = '#e74c3c';
+                    } else {
+                        counter.style.color = '#666';
+                    }
+                });
+            }
+        });
+        
+        // Auto-resize textareas
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+        
+        // Form validation feedback
+        document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = '#27ae60';
+                }
+            });
+            
+            field.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.style.borderColor = '#27ae60';
+                }
+            });
+        });
+        
+        // Real-time NIK validation
+        document.getElementById('nik').addEventListener('input', function() {
+            const value = this.value;
+            const isValid = /^\d{16}$/.test(value);
+            
+            if (value.length === 16 && isValid) {
+                this.style.borderColor = '#27ae60';
+            } else if (value.length > 0 && value.length < 16) {
+                this.style.borderColor = '#f39c12';
+            } else if (value.length === 16 && !isValid) {
+                this.style.borderColor = '#e74c3c';
+            }
+        });
+        
+        // Real-time phone validation
+        document.getElementById('telepon').addEventListener('input', function() {
+            const value = this.value.replace(/\s|-/g, '');
+            const isValid = /^(\+62|62|0)\d{8,13}$/.test(value);
+            
+            if (isValid) {
+                this.style.borderColor = '#27ae60';
+            } else if (value.length > 0) {
+                this.style.borderColor = '#f39c12';
+            }
+        });
+        
+        // Email validation
+        document.getElementById('email').addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                this.style.borderColor = '';
+                return;
+            }
+            
+            const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value);
+            if (isValid) {
+                this.style.borderColor = '#27ae60';
+            } else {
+                this.style.borderColor = '#e74c3c';
+            }
+        });
+        
+        // Back to top button
+        const backToTopButton = document.createElement('button');
+        backToTopButton.innerHTML = '↑';
+        backToTopButton.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        `;
+        document.body.appendChild(backToTopButton);
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.opacity = '1';
+            } else {
+                backToTopButton.style.opacity = '0';
+            }
+        });
+        
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

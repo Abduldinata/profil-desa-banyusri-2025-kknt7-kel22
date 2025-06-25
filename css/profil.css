@@ -1,0 +1,633 @@
+/* =============================================================================
+   CSS untuk Halaman Profil Desa Banyusri
+   ============================================================================= */
+
+/* Reset dan Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* =============================================================================
+   Header Section
+   ============================================================================= */
+header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    font-size: 3rem;
+}
+
+.header-text h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.header-text p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* =============================================================================
+   Navigation
+   ============================================================================= */
+nav {
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-item {
+    padding: 1rem 0;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: #3498db;
+    border-bottom-color: #3498db;
+}
+
+/* =============================================================================
+   Main Content Layout
+   ============================================================================= */
+.page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+/* =============================================================================
+   Profile Sections
+   ============================================================================= */
+.profile-section {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.profile-section h2 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 1rem;
+}
+
+.profile-section h3 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-section h4 {
+    color: #34495e;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-section h5 {
+    color: #2c3e50;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+/* =============================================================================
+   Village Images
+   ============================================================================= */
+.village-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 1rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* =============================================================================
+   Profile Grid Layout
+   ============================================================================= */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.info-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid #3498db;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.info-item h4 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.info-item p {
+    color: #666;
+    margin: 0;
+}
+
+/* =============================================================================
+   Officials Grid (Perangkat Desa)
+   ============================================================================= */
+.officials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.official-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.official-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.official-card .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.official-card h4 {
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.official-card p {
+    margin: 0.5rem 0;
+    opacity: 0.9;
+}
+
+.official-card p strong {
+    font-size: 1.1rem;
+    opacity: 1;
+}
+
+/* =============================================================================
+   Dusun List
+   ============================================================================= */
+.dusun-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.dusun-item {
+    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.dusun-item:hover {
+    transform: scale(1.02);
+}
+
+.dusun-item h5 {
+    color: white;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.dusun-item p {
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* =============================================================================
+   Facilities Grid
+   ============================================================================= */
+.facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.facility-item {
+    background: white;
+    border: 2px solid #ecf0f1;
+    padding: 2rem 1rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.facility-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.facility-item:hover::before {
+    transform: translateX(0);
+}
+
+.facility-item:hover {
+    border-color: #3498db;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.facility-item .number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 0.5rem;
+}
+
+.facility-item p {
+    color: #666;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* =============================================================================
+   Map Placeholder
+   ============================================================================= */
+.map-placeholder {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+    border-radius: 15px;
+    margin: 2rem 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.map-placeholder small {
+    display: block;
+    margin-top: 1rem;
+    opacity: 0.8;
+    font-size: 1rem;
+}
+
+/* =============================================================================
+   Footer
+   ============================================================================= */
+footer {
+    background: #2c3e50;
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+}
+
+.footer-content p {
+    margin: 0.5rem 0;
+    opacity: 0.7;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+/* Large Tablets */
+@media (max-width: 1024px) {
+    .page-content {
+        padding: 1.5rem;
+    }
+    
+    .profile-section {
+        padding: 2rem;
+    }
+    
+    .officials-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .facilities-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    .header-content {
+        padding: 0 1rem;
+    }
+
+    .header-text h1 {
+        font-size: 1.5rem;
+    }
+
+    .nav-container {
+        padding: 0 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .page-content {
+        padding: 1rem;
+    }
+
+    .profile-section {
+        padding: 1.5rem;
+    }
+
+    .profile-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .profile-section h3 {
+        font-size: 1.3rem;
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .officials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .facilities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dusun-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .village-image {
+        height: 200px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 480px) {
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .header-text h1 {
+        font-size: 1.2rem;
+    }
+    
+    .header-text p {
+        font-size: 0.8rem;
+    }
+    
+    .nav-container {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .nav-item {
+        padding: 0.75rem 0;
+        text-align: center;
+        border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .page-content {
+        padding: 0.5rem;
+    }
+
+    .profile-section {
+        padding: 1rem;
+    }
+
+    .profile-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .profile-section h3 {
+        font-size: 1.2rem;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .facilities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dusun-list {
+        grid-template-columns: 1fr;
+    }
+
+    .official-card {
+        padding: 1.5rem;
+    }
+
+    .map-placeholder {
+        padding: 2rem 1rem;
+        font-size: 1.2rem;
+    }
+
+    .village-image {
+        height: 150px;
+    }
+}
+
+/* =============================================================================
+   Utility Classes
+   ============================================================================= */
+.text-center {
+    text-align: center;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+/* Active state for navigation */
+.active {
+    display: block;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+.nav-item:focus,
+.info-item:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .nav-container,
+    footer {
+        display: none;
+    }
+    
+    .profile-section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+    }
+    
+    .village-image {
+        max-height: 200px;
+    }
+}
+
+/* =============================================================================
+   Special Animation Effects
+   ============================================================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.profile-section:nth-child(even) {
+    animation-delay: 0.1s;
+}
+
+.profile-section:nth-child(odd) {
+    animation-delay: 0.2s;
+}
+
+/* Hover effect for images */
+.village-image:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
+
+/* Gradient text effect for main headings */
+.profile-section h2 {
+    background: linear-gradient(45deg, #3498db, #2ecc71);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
