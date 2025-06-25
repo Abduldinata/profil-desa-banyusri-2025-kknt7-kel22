@@ -131,71 +131,83 @@
 
                     <div id="alert-container"></div>
 
-            <form id="complaint-form" class="complaint-form">
+        <form id="complaint-form" class="complaint-form">
             <!-- Nama, NIK, Telepon tetap seperti biasa -->
             <div class="form-group">
             <label for="nama">Nama Lengkap *</label>
-            <input type="text" id="nama" name="nama" required>
+            <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap Anda">
             </div>
 
             <div class="form-group">
             <label for="nik">NIK *</label>
-            <input type="text" id="nik" name="nik" required maxlength="16">
+            <input type="text" id="nik" name="nik" required maxlength="16" placeholder="Masukkan NIK Anda">
             </div>
 
             <div class="form-group">
             <label for="telepon">No. Telepon *</label>
-            <input type="tel" id="telepon" name="telepon" required>
+            <input type="tel" id="telepon" name="telepon" required placeholder="Masukkan nomor telepon Anda">
             </div>
 
-            <!-- Tambahan Email + OTP -->
-            <div class="form-group">
-            <label for="email">Email *</label>
-            <input type="email" id="email" name="email" required placeholder="email@contoh.com">
-            <button type="button" id="btn-kirim-otp" class="btn btn-secondary" style="margin-top: 10px">🔐 Kirim Kode Verifikasi</button>
-            <div id="otp-section" style="display:none; margin-top: 10px;">
-                <label for="otp">Masukkan Kode OTP *</label>
-                <input type="text" id="otp" placeholder="6 digit kode" maxlength="6">
-                <button type="button" id="btn-verifikasi-otp" class="btn btn-primary" style="margin-top: 10px">✅ Verifikasi OTP</button>
-            </div>
-            </div>
+        <!-- Tambahan Email + OTP -->
+        <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required placeholder="email@contoh.com">
+        <button type="button" id="btn-kirim-otp" class="btn btn-secondary" style="margin-top: 10px">🔐 Kirim Kode Verifikasi</button>
+        <div id="otp-section" style="display:none; margin-top: 10px;">
+            <label for="otp">Masukkan Kode OTP *</label>
+            <input type="text" id="otp" name="otp" placeholder="6 digit kode" maxlength="6" required>
+            <button type="button" id="btn-verifikasi-otp" class="btn btn-primary" style="margin-top: 10px">✅ Verifikasi OTP</button>
+        </div>
+        </div>
 
-            <!-- Alamat, Jenis Pengaduan, dll -->
-            <div class="form-group">
-            <label for="alamat">Alamat *</label>
-            <input type="text" id="alamat" name="alamat" required>
-            </div>
+        <!-- Alamat, Jenis Pengaduan, dll -->
+        <div class="form-group">
+        <label for="alamat">Alamat *</label>
+        <input type="text" id="alamat" name="alamat" required placeholder="Masukkan alamat lengkap Anda">
+        </div>
 
             <div class="form-group">
             <label for="jenis_pengaduan">Jenis Pengaduan *</label>
             <select id="jenis_pengaduan" name="jenis_pengaduan" required>
-                <option value="">-- Pilih --</option>
-                <option value="infrastruktur">Infrastruktur</option>
-                <option value="pelayanan">Pelayanan Publik</option>
-                <option value="keamanan">Keamanan</option>
+            <option value="">-- Pilih Jenis Pengaduan --</option>
+            <option value="infrastruktur">🏗️ Infrastruktur Desa</option>
+            <option value="pelayanan_publik">🏛️ Pelayanan Publik</option>
+            <option value="keamanan">🛡️ Keamanan & Ketertiban</option>
+            <option value="lingkungan">🌱 Lingkungan Hidup</option>
+            <option value="administrasi">📄 Administrasi Kependudukan</option>
+            <option value="sosial">🤝 Bantuan Sosial & Kesejahteraan</option>
+            <option value="ekonomi">💼 Ekonomi & UMKM</option>
+            <option value="pendidikan">🎓 Pendidikan & Sekolah</option>
+            <option value="kesehatan">🏥 Kesehatan & Posyandu</option>
+            <option value="agama">🕌 Kegiatan Keagamaan</option>
+            <option value="kebudayaan">🎭 Kebudayaan & Kesenian</option>
+            <option value="lainnya">📋 Lainnya</option>
             </select>
             </div>
 
-            <div class="form-group">
-            <label for="judul_pengaduan">Judul *</label>
-            <input type="text" id="judul_pengaduan" name="judul_pengaduan" required>
-            </div>
+        <div class="form-group">
+        <label for="judul_pengaduan">Judul *</label>
+        <input type="text" id="judul_pengaduan" name="judul_pengaduan" required placeholder="Masukkan judul pengaduan Anda">
+        </div>
 
-            <div class="form-group">
-            <label for="isi_pengaduan">Isi Pengaduan *</label>
-            <textarea id="isi_pengaduan" name="isi_pengaduan" required></textarea>
-            </div>
+        <div class="form-group">
+        <label for="isi_pengaduan">Isi Pengaduan *</label>
+        <textarea id="isi_pengaduan" name="isi_pengaduan" required placeholder="Jelaskan pengaduan Anda secara rinci"></textarea>
+        </div>
 
-            <div class="form-group">
-            <label for="harapan">Harapan/Saran</label>
-            <textarea id="harapan" name="harapan"></textarea>
-            </div>
+        <div class="form-group">
+        <label for="harapan">Harapan/Saran</label>
+        <textarea id="harapan" name="harapan" placeholder="Tuliskan harapan atau saran Anda"></textarea>
+        </div>
 
-            <div class="button-group">
-            <button type="submit" class="btn btn-primary">📤 Kirim Pengaduan</button>
-            <button type="reset" class="btn btn-secondary">🔄 Reset</button>
-            </div>
+        <div class="button-group">
+        <button type="submit" class="btn btn-primary">📤 Kirim Pengaduan</button>
+        <button type="reset" class="btn btn-secondary">🔄 Reset</button>
+        </div>
         </form>
+        </div>
+
+                    <!-- Loading Spinner -->
 
         <div id="alert-container"></div>
                     <div id="loading" class="loading">

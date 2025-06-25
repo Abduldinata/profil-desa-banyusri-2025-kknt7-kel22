@@ -631,3 +631,47 @@ html {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* =============================================================================
+   Peta Per Dusun (Embedded Google Maps)
+   ============================================================================= */
+.maps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.map-box {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.map-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.map-box h4 {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.map-box iframe {
+    width: 300%;
+    height: 300px;
+    border: none;
+    border-radius: 5px;
+}
+.map-box p {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    margin-top: 0.5rem;
+}

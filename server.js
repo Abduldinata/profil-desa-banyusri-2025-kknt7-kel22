@@ -111,6 +111,6 @@ Waktu: ${new Date().toLocaleTimeString('id-ID')}
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server berjalan di http://localhost:${PORT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server berjalan di port", process.env.PORT || 3000);
 });
