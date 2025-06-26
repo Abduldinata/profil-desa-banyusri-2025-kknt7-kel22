@@ -325,10 +325,10 @@
             data[key] = value;
         }
 
-        fetch('http://localhost:3000/kirim-pengaduan', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+        fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
         })
         .then(res => res.json())
         .then(response => {

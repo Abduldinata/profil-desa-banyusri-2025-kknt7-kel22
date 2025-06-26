@@ -8,7 +8,12 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: 'profil-desa-banyusri-2025-kknt7-kel.vercel.app', // bisa diganti ke domain Vercel kalau mau ketat
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
+
 app.use(bodyParser.json());
 
 // Simpan OTP sementara dalam memory (email -> { kode, waktu })
