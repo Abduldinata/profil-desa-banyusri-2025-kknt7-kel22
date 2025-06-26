@@ -274,11 +274,12 @@
         const email = document.getElementById('email').value.trim();
         if (!email) return showAlert('Mohon masukkan email terlebih dahulu', 'error');
 
-        fetch('http://localhost:3000/kirim-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
+        fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/kirim-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
         })
+
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -295,11 +296,12 @@
         const email = document.getElementById('email').value.trim();
         const otp = document.getElementById('otp').value.trim();
 
-        fetch('http://localhost:3000/verifikasi-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp })
+        fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/verifikasi-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp })
         })
+
         .then(res => res.json())
         .then(data => {
             if (data.success) {
@@ -325,11 +327,12 @@
             data[key] = value;
         }
 
-        fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app', {
+        fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/kirim-pengaduan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify(data)
         })
+
         .then(res => res.json())
         .then(response => {
             if (response.success) {
