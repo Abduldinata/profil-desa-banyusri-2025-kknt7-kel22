@@ -5,9 +5,11 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+
 const app = express();
 const PORT = 3000;
 
+const { Pool } = require('pg'); // ✅ tambahkan ini
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
