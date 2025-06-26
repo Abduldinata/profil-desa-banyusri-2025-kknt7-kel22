@@ -9,10 +9,11 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors({
-  origin: 'profil-desa-banyusri-2025-kknt7-kel.vercel.app', // bisa diganti ke domain Vercel kalau mau ketat
+  origin: 'https://profil-desa-banyusri-2025-kknt7-kel.vercel.app',
   methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  credentials: false
 }));
+
 
 app.use(bodyParser.json());
 
