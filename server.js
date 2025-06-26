@@ -8,6 +8,37 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3000;
 
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+// --- Jalankan ini sekali saat pertama deploy ---
+(async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS pengaduan (
+        id SERIAL PRIMARY KEY,
+        nama VARCHAR(100),
+        nik VARCHAR(20),
+        telepon VARCHAR(20),
+        email VARCHAR(100),
+        alamat TEXT,
+        jenis_pengaduan VARCHAR(100),
+        judul_pengaduan VARCHAR(200),
+        isi_pengaduan TEXT,
+        harapan TEXT,
+        tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('✅ Tabel pengaduan berhasil dibuat atau sudah ada.');
+  } catch (err) {
+    console.error('❌ Gagal membuat tabel pengaduan:', err);
+  }
+})();
+
 app.use(cors({
   origin: 'https://profil-desa-banyusri-2025-kknt7-kel.vercel.app',
   methods: ['GET', 'POST'],
