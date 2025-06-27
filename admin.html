@@ -23,6 +23,7 @@
   </table>
 
   <script>
+    // Ambil data pengaduan dari backend
     fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan')
       .then(res => res.json())
       .then(res => {
@@ -34,7 +35,13 @@
             <td>${item.nama}</td>
             <td>${item.jenis_pengaduan}</td>
             <td>${item.judul_pengaduan}</td>
-            <td><span class="badge ${item.status}">${item.status}</span></td>
+            <td>
+              <select onchange="ubahStatus(${item.id}, this.value)">
+                <option value="menunggu" ${item.status === 'menunggu' ? 'selected' : ''}>menunggu</option>
+                <option value="diproses" ${item.status === 'diproses' ? 'selected' : ''}>diproses</option>
+                <option value="selesai" ${item.status === 'selesai' ? 'selected' : ''}>selesai</option>
+              </select>
+            </td>
             <td>${new Date(item.tanggal).toLocaleString('id-ID')}</td>
           `;
           tbody.appendChild(row);
@@ -45,6 +52,27 @@
         const tbody = document.querySelector('#pengaduan-table tbody');
         tbody.innerHTML = '<tr><td colspan="5">Gagal memuat data.</td></tr>';
       });
+
+    // Fungsi ubah status
+    function ubahStatus(id, status) {
+      fetch(`https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          alert('✅ Status berhasil diubah');
+        } else {
+          alert('❌ Gagal mengubah status');
+        }
+      })
+      .catch(err => {
+        alert('❌ Error koneksi ke server');
+        console.error(err);
+      });
+    }
   </script>
 </body>
 </html>
