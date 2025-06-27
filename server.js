@@ -164,6 +164,20 @@ app.get('/admin/pengaduan', async (req, res) => {
   }
 });
 
+// Ambil pengaduan berdasarkan ID untuk admin
+ app.put('/admin/pengaduan/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    await pool.query('UPDATE pengaduan SET status = $1 WHERE id = $2', [status, id]);
+    res.json({ success: true, message: 'Status berhasil diperbarui' });
+  } catch (err) {
+    console.error('❌ Gagal ubah status:', err);
+    res.status(500).json({ success: false, message: 'Gagal ubah status' });
+  }
+});
+
 // Jalankan server
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di port ${PORT}`);

@@ -1,0 +1,10 @@
+body { font-family: sans-serif; padding: 2rem; background: #f7f7f7; }
+    h1 { color: #2c3e50; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    th, td { padding: 10px; border: 1px solid #ccc; }
+    th { background: #3498db; color: white; }
+    tr:nth-child(even) { background: #f0f0f0; }
+    .badge { padding: 4px 8px; border-radius: 5px; font-size: 0.8rem; }
+    .menunggu { background: #f39c12; color: white; }
+    .diproses { background: #2980b9; color: white; }
+    .selesai { background: #27ae60; color: white; }
