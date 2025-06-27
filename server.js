@@ -153,6 +153,17 @@ PENGADUAN BARU MASUK
   }
 });
 
+// Ambil semua pengaduan untuk admin
+app.get('/admin/pengaduan', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM pengaduan ORDER BY tanggal DESC');
+    res.json({ success: true, data: result.rows });
+  } catch (err) {
+    console.error('❌ Gagal ambil data pengaduan:', err);
+    res.status(500).json({ success: false, message: 'Gagal ambil data pengaduan' });
+  }
+});
+
 // Jalankan server
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di port ${PORT}`);
