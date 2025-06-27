@@ -164,19 +164,58 @@ app.get('/admin/pengaduan', async (req, res) => {
   }
 });
 
-// Ambil pengaduan berdasarkan ID untuk admin
- app.put('/admin/pengaduan/:id/status', async (req, res) => {
+app.put('/admin/pengaduan/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
   try {
+    // Ambil data pengaduan dulu (untuk email pelapor)
+    const result = await pool.query('SELECT * FROM pengaduan WHERE id = $1', [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pengaduan tidak ditemukan' });
+    }
+
+    const data = result.rows[0];
+
+    // Update status di database
     await pool.query('UPDATE pengaduan SET status = $1 WHERE id = $2', [status, id]);
-    res.json({ success: true, message: 'Status berhasil diperbarui' });
+
+    // Kirim email ke pelapor
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: data.email,
+      subject: `Status Pengaduan Anda Telah Diperbarui - Desa Banyusri`,
+      text: `
+Halo ${data.nama},
+
+Pengaduan Anda dengan judul:
+📋 "${data.judul_pengaduan}"
+
+Telah diperbarui statusnya menjadi: 🏷️ ${status.toUpperCase()}
+
+Terima kasih atas partisipasi Anda untuk kemajuan Desa Banyusri 🙏
+
+Salam,
+Admin Sistem Pengaduan Desa Banyusri
+      `
+    });
+
+    res.json({ success: true, message: 'Status berhasil diperbarui & email terkirim.' });
+
   } catch (err) {
-    console.error('❌ Gagal ubah status:', err);
-    res.status(500).json({ success: false, message: 'Gagal ubah status' });
+    console.error('❌ Gagal ubah status / kirim email:', err);
+    res.status(500).json({ success: false, message: 'Gagal memperbarui status atau kirim email' });
   }
 });
+
 
 // Jalankan server
 app.listen(PORT, () => {
