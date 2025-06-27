@@ -39,6 +39,41 @@ const pool = new Pool({
   }
 })();
 
+// Kirim email ke balai desa
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+await transporter.sendMail({
+  from: process.env.EMAIL_USER,
+  to: process.env.EMAIL_DESTINATION,
+  subject: `Pengaduan Baru dari ${data.nama}`,
+  text: `
+PENGADUAN BARU MASUK
+
+🧑 Nama: ${data.nama}
+🪪 NIK: ${data.nik}
+📞 Telepon: ${data.telepon}
+📧 Email: ${data.email || 'Tidak diisi'}
+📍 Alamat: ${data.alamat}
+
+📌 Jenis: ${data.jenis_pengaduan}
+📋 Judul: ${data.judul_pengaduan}
+📝 Isi: ${data.isi_pengaduan}
+🎯 Harapan: ${data.harapan || 'Tidak diisi'}
+
+📅 Tanggal: ${new Date().toLocaleDateString('id-ID')}
+🕒 Waktu: ${new Date().toLocaleTimeString('id-ID')}
+`
+});
+
+res.json({ success: true, message: 'Pengaduan berhasil disimpan dan dikirim ke email desa.' });
+
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
