@@ -39,6 +39,24 @@ const pool = new Pool({
   }
 })();
 
+// Auto-buat tabel admin
+// Pastikan tabel admin ada untuk menyimpan akun admin
+(async () => {
+  try {
+    // Buat tabel admin jika belum ada
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS admin (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password TEXT NOT NULL
+      )
+    `);
+    console.log("✅ Tabel admin berhasil dibuat atau sudah ada.");
+  } catch (err) {
+    console.error("❌ Gagal membuat tabel admin:", err);
+  }
+})();
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
