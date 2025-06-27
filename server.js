@@ -164,12 +164,12 @@ app.get('/admin/pengaduan', async (req, res) => {
   }
 });
 
+// Ambil detail pengaduan berdasarkan ID
 app.put('/admin/pengaduan/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
   try {
-    // Ambil data pengaduan dulu (untuk email pelapor)
     const result = await pool.query('SELECT * FROM pengaduan WHERE id = $1', [id]);
     if (result.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pengaduan tidak ditemukan' });
@@ -177,10 +177,8 @@ app.put('/admin/pengaduan/:id/status', async (req, res) => {
 
     const data = result.rows[0];
 
-    // Update status di database
     await pool.query('UPDATE pengaduan SET status = $1 WHERE id = $2', [status, id]);
 
-    // Kirim email ke pelapor
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -190,21 +188,31 @@ app.put('/admin/pengaduan/:id/status', async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: `"Pengaduan Desa Banyusri" <${process.env.EMAIL_USER}>`,
       to: data.email,
-      subject: `Status Pengaduan Anda Telah Diperbarui - Desa Banyusri`,
-      text: `
-Halo ${data.nama},
+      subject: `📬 Status Pengaduan Anda: ${status.toUpperCase()}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:600px;margin:auto;padding:1.5rem;border:1px solid #eee;border-radius:8px;">
+          <h2 style="color:#2c3e50;">📋 Pengaduan Anda Telah Diperbarui</h2>
+          <p>Halo <strong>${data.nama}</strong>,</p>
 
-Pengaduan Anda dengan judul:
-📋 "${data.judul_pengaduan}"
+          <p>Pengaduan Anda dengan judul:</p>
+          <blockquote style="background:#f9f9f9;padding:10px;border-left:4px solid #3498db;">
+            ${data.judul_pengaduan}
+          </blockquote>
 
-Telah diperbarui statusnya menjadi: 🏷️ ${status.toUpperCase()}
+          <p>Status terbaru:</p>
+          <p>
+            <span style="background:#3498db;color:#fff;padding:8px 14px;border-radius:5px;font-weight:bold;">
+              ${status.toUpperCase()}
+            </span>
+          </p>
 
-Terima kasih atas partisipasi Anda untuk kemajuan Desa Banyusri 🙏
+          <p style="margin-top:1rem;">Terima kasih atas partisipasi Anda untuk kemajuan <strong>Desa Banyusri</strong> 🙏</p>
 
-Salam,
-Admin Sistem Pengaduan Desa Banyusri
+          <hr style="margin:2rem 0;">
+          <p style="font-size:0.85rem;color:#666;">Email ini dikirim otomatis oleh Sistem Pengaduan Online Desa Banyusri. Jangan balas email ini.</p>
+        </div>
       `
     });
 
@@ -215,6 +223,7 @@ Admin Sistem Pengaduan Desa Banyusri
     res.status(500).json({ success: false, message: 'Gagal memperbarui status atau kirim email' });
   }
 });
+
 
 
 // Jalankan server
