@@ -23,6 +23,10 @@
   </table>
 
   <script>
+  if (localStorage.getItem('adminLogin') !== 'true') {
+    window.location.href = 'login.html';
+  }
+
     // Ambil data pengaduan dari backend
     fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan')
       .then(res => res.json())
