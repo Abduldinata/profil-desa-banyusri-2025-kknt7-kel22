@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Pengaduan</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <h1>📋 Dashboard Admin - Pengaduan Masyarakat</h1>
+  <table id="pengaduan-table">
+    <thead>
+      <tr>
+        <th>Nama</th>
+        <th>Jenis</th>
+        <th>Judul</th>
+        <th>Status</th>
+        <th>Tanggal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="5">Memuat data...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan')
+      .then(res => res.json())
+      .then(res => {
+        const tbody = document.querySelector('#pengaduan-table tbody');
+        tbody.innerHTML = '';
+        res.data.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.nama}</td>
+            <td>${item.jenis_pengaduan}</td>
+            <td>${item.judul_pengaduan}</td>
+            <td><span class="badge ${item.status}">${item.status}</span></td>
+            <td>${new Date(item.tanggal).toLocaleString('id-ID')}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(err => {
+        console.error('Gagal ambil data:', err);
+        const tbody = document.querySelector('#pengaduan-table tbody');
+        tbody.innerHTML = '<tr><td colspan="5">Gagal memuat data.</td></tr>';
+      });
+  </script>
+</body>
+</html>
