@@ -15,7 +15,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// Buat tabel pengaduan jika belum ada
+// Auto-buat tabel pengaduan
 (async () => {
   try {
     await pool.query(`
@@ -39,49 +39,14 @@ const pool = new Pool({
   }
 })();
 
-// Kirim email ke balai desa
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-await transporter.sendMail({
-  from: process.env.EMAIL_USER,
-  to: process.env.EMAIL_DESTINATION,
-  subject: `Pengaduan Baru dari ${data.nama}`,
-  text: `
-PENGADUAN BARU MASUK
-
-🧑 Nama: ${data.nama}
-🪪 NIK: ${data.nik}
-📞 Telepon: ${data.telepon}
-📧 Email: ${data.email || 'Tidak diisi'}
-📍 Alamat: ${data.alamat}
-
-📌 Jenis: ${data.jenis_pengaduan}
-📋 Judul: ${data.judul_pengaduan}
-📝 Isi: ${data.isi_pengaduan}
-🎯 Harapan: ${data.harapan || 'Tidak diisi'}
-
-📅 Tanggal: ${new Date().toLocaleDateString('id-ID')}
-🕒 Waktu: ${new Date().toLocaleTimeString('id-ID')}
-`
-});
-
-res.json({ success: true, message: 'Pengaduan berhasil disimpan dan dikirim ke email desa.' });
-
-
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Penyimpanan OTP sementara
+// Simpan OTP sementara
 const otpStore = {};
 
-// Kirim OTP ke email
+// Endpoint kirim OTP ke email user
 app.post('/kirim-otp', async (req, res) => {
   const { email } = req.body;
 
@@ -89,7 +54,7 @@ app.post('/kirim-otp', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Email tidak valid' });
   }
 
-  const otp = Math.floor(100000 + Math.random() * 900000); // 6 digit
+  const otp = Math.floor(100000 + Math.random() * 900000);
   otpStore[email] = otp;
 
   try {
@@ -115,25 +80,27 @@ app.post('/kirim-otp', async (req, res) => {
   }
 });
 
-// Verifikasi OTP
+// Endpoint verifikasi OTP
 app.post('/verifikasi-otp', (req, res) => {
   const { email, otp } = req.body;
 
   if (otpStore[email] && otpStore[email].toString() === otp) {
-    delete otpStore[email]; // OTP hanya bisa sekali pakai
+    delete otpStore[email];
     return res.json({ success: true, message: 'OTP berhasil diverifikasi.' });
   }
 
   return res.status(400).json({ success: false, message: 'OTP tidak valid atau sudah kadaluarsa.' });
 });
 
-// Simpan pengaduan ke database
+// Endpoint simpan pengaduan dan kirim ke email desa
 app.post('/kirim-pengaduan', async (req, res) => {
   const data = req.body;
 
   try {
+    // Simpan ke database
     await pool.query(`
-      INSERT INTO pengaduan (nama, nik, telepon, email, alamat, jenis_pengaduan, judul_pengaduan, isi_pengaduan, harapan)
+      INSERT INTO pengaduan
+        (nama, nik, telepon, email, alamat, jenis_pengaduan, judul_pengaduan, isi_pengaduan, harapan)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
     `, [
       data.nama,
@@ -147,10 +114,42 @@ app.post('/kirim-pengaduan', async (req, res) => {
       data.harapan
     ]);
 
-    res.json({ success: true, message: 'Pengaduan berhasil disimpan.' });
+    // Kirim email ke admin/balai desa
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_DESTINATION,
+      subject: `Pengaduan Baru dari ${data.nama}`,
+      text: `
+PENGADUAN BARU MASUK
+
+🧑 Nama: ${data.nama}
+🪪 NIK: ${data.nik}
+📞 Telepon: ${data.telepon}
+📧 Email: ${data.email || 'Tidak diisi'}
+📍 Alamat: ${data.alamat}
+
+📌 Jenis: ${data.jenis_pengaduan}
+📋 Judul: ${data.judul_pengaduan}
+📝 Isi: ${data.isi_pengaduan}
+🎯 Harapan: ${data.harapan || 'Tidak diisi'}
+
+📅 Tanggal: ${new Date().toLocaleDateString('id-ID')}
+🕒 Waktu: ${new Date().toLocaleTimeString('id-ID')}
+      `
+    });
+
+    res.json({ success: true, message: 'Pengaduan berhasil disimpan dan dikirim ke email desa.' });
   } catch (error) {
-    console.error('❌ Gagal menyimpan pengaduan:', error);
-    res.status(500).json({ success: false, message: 'Gagal menyimpan pengaduan.' });
+    console.error('❌ Gagal menyimpan/kirim email:', error);
+    res.status(500).json({ success: false, message: 'Gagal menyimpan/kirim email pengaduan.' });
   }
 });
 
@@ -159,7 +158,6 @@ app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di port ${PORT}`);
 });
 // Tangani error global
-app.use((err, req, res, next) => {
-  console.error('❌ Terjadi kesalahan:', err);
-  res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server.' });
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
 });
