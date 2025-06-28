@@ -13,6 +13,9 @@ const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const PORT = process.env.PORT || 8080;
 
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = process.env.JWT_SECRET || 'rahasiaDesaBanyusri';
+
 // Koneksi PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -249,29 +252,62 @@ app.put('/admin/pengaduan/:id/status', async (req, res) => {
 // Endpoint untuk login admin
 app.post('/admin/login', async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const result = await pool.query('SELECT * FROM admin WHERE username = $1', [username]);
-
     if (result.rows.length === 0) {
       return res.status(401).json({ success: false, message: 'Username tidak ditemukan' });
     }
 
     const admin = result.rows[0];
     const valid = await bcrypt.compare(password, admin.password);
-
     if (!valid) {
       return res.status(401).json({ success: false, message: 'Password salah' });
     }
 
-    // Sukses login
-    res.json({ success: true, message: 'Login berhasil', token: 'admin-valid-token' });
+    // Buat JWT token
+    const token = jwt.sign({ id: admin.id, username: admin.username }, SECRET_KEY, { expiresIn: '1h' });
+    res.json({ success: true, token });
   } catch (err) {
-    console.error('❌ Login error:', err);
-    res.status(500).json({ success: false, message: 'Kesalahan server saat login' });
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Kesalahan server' });
+  }
+});
+// Middleware untuk autentikasi JWT
+function verifikasiAdmin(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ success: false, message: 'Token tidak ada' });
+  }
+
+// Ambil token dari header
+  app.get('/admin/pengaduan', verifikasiAdmin, async (req, res) => {
+  const result = await pool.query('SELECT * FROM pengaduan ORDER BY tanggal DESC');
+  res.json({ success: true, data: result.rows });
+});
+
+app.put('/admin/pengaduan/:id/status', verifikasiAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    await pool.query('UPDATE pengaduan SET status = $1 WHERE id = $2', [status, id]);
+    res.json({ success: true, message: 'Status diperbarui' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Gagal update status' });
   }
 });
 
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.admin = decoded;
+    next();
+  } catch (err) {
+    return res.status(403).json({ success: false, message: 'Token tidak valid' });
+  }
+}
 
 // Jalankan server
 app.listen(PORT, () => {

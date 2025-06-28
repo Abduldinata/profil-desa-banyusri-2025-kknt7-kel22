@@ -1,81 +1,87 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - Pengaduan</title>
-  <link rel="stylesheet" href="css/admin.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin - Desa Banyusri</title>
+  <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
-  <h1>📋 Dashboard Admin - Pengaduan Masyarakat</h1>
-  <table id="pengaduan-table">
-    <thead>
-      <tr>
-        <th>Nama</th>
-        <th>Jenis</th>
-        <th>Judul</th>
-        <th>Status</th>
-        <th>Tanggal</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td colspan="5">Memuat data...</td></tr>
-    </tbody>
-  </table>
+  <div class="admin-container">
+    <h1>📋 Dashboard Pengaduan</h1>
+    <button onclick="logout()">🔓 Logout</button>
+    <div id="pengaduan-list"></div>
+  </div>
 
   <script>
-  if (localStorage.getItem('adminLogin') !== 'true') {
-    window.location.href = 'login.html';
-  }
+    const token = localStorage.getItem("admin_token");
+    if (!token) {
+      window.location.href = "login.html";
+    }
 
-    // Ambil data pengaduan dari backend
-    fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan')
-      .then(res => res.json())
-      .then(res => {
-        const tbody = document.querySelector('#pengaduan-table tbody');
-        tbody.innerHTML = '';
-        res.data.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${item.nama}</td>
-            <td>${item.jenis_pengaduan}</td>
-            <td>${item.judul_pengaduan}</td>
-            <td>
+    // Ambil data pengaduan
+    fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan", {
+      headers: { Authorization: "Bearer " + token }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const list = document.getElementById("pengaduan-list");
+        if (data.data.length === 0) {
+          list.innerHTML = "<p>Tidak ada pengaduan saat ini.</p>";
+        } else {
+          data.data.forEach(item => {
+            const card = document.createElement("div");
+            card.className = "pengaduan-card";
+            card.innerHTML = `
+              <h3>${item.judul_pengaduan}</h3>
+              <p><strong>Nama:</strong> ${item.nama}</p>
+              <p><strong>NIK:</strong> ${item.nik}</p>
+              <p><strong>Telepon:</strong> ${item.telepon}</p>
+              <p><strong>Alamat:</strong> ${item.alamat}</p>
+              <p><strong>Jenis:</strong> ${item.jenis_pengaduan}</p>
+              <p><strong>Isi:</strong> ${item.isi_pengaduan}</p>
+              <p><strong>Status:</strong> <span id="status-${item.id}">${item.status || "Menunggu"}</span></p>
               <select onchange="ubahStatus(${item.id}, this.value)">
-                <option value="menunggu" ${item.status === 'menunggu' ? 'selected' : ''}>menunggu</option>
-                <option value="diproses" ${item.status === 'diproses' ? 'selected' : ''}>diproses</option>
-                <option value="selesai" ${item.status === 'selesai' ? 'selected' : ''}>selesai</option>
+                <option value="Menunggu" ${item.status === "Menunggu" ? "selected" : ""}>Menunggu</option>
+                <option value="Diproses" ${item.status === "Diproses" ? "selected" : ""}>Diproses</option>
+                <option value="Selesai" ${item.status === "Selesai" ? "selected" : ""}>Selesai</option>
               </select>
-            </td>
-            <td>${new Date(item.tanggal).toLocaleString('id-ID')}</td>
-          `;
-          tbody.appendChild(row);
-        });
-      })
-      .catch(err => {
-        console.error('Gagal ambil data:', err);
-        const tbody = document.querySelector('#pengaduan-table tbody');
-        tbody.innerHTML = '<tr><td colspan="5">Gagal memuat data.</td></tr>';
-      });
+            `;
+            list.appendChild(card);
+          });
+        }
+      } else {
+        alert("Gagal memuat data pengaduan");
+      }
+    })
+    .catch(() => {
+      alert("Gagal terhubung ke server");
+    });
 
-    // Fungsi ubah status
     function ubahStatus(id, status) {
       fetch(`https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan/${id}/status`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token
+        },
         body: JSON.stringify({ status })
       })
       .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          alert('✅ Status berhasil diubah');
+      .then(data => {
+        if (data.success) {
+          document.getElementById("status-" + id).innerText = status;
+          alert("Status diperbarui");
         } else {
-          alert('❌ Gagal mengubah status');
+          alert("Gagal memperbarui status");
         }
-      })
-      .catch(err => {
-        alert('❌ Error koneksi ke server');
-        console.error(err);
       });
+    }
+
+    function logout() {
+      localStorage.removeItem("admin_token");
+      window.location.href = "login.html";
     }
   </script>
 </body>

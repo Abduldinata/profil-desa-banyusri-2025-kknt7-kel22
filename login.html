@@ -1,91 +1,45 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Login Admin - Pengaduan Desa</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .login-box {
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 350px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.7rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      width: 100%;
-      padding: 0.7rem;
-      background: #3498db;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-
-    .error {
-      color: red;
-      text-align: center;
-      font-size: 0.9rem;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login - Desa Banyusri</title>
+  <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
-  <div class="login-box">
+  <div class="login-container">
     <h2>🔐 Login Admin</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <div class="error" id="error-msg"></div>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
     <button onclick="login()">Login</button>
+    <p id="error-message" style="color: red"></p>
   </div>
 
   <script>
-  function login() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("error-message");
+      errorMsg.textContent = "";
 
-    fetch('https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    })
+      fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      })
       .then(res => res.json())
-      .then(res => {
-        if (res.success) {
-          localStorage.setItem('admin_token', res.token);
-          window.location.href = 'admin.html';
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("admin_token", data.token);
+          window.location.href = "admin.html";
         } else {
-          alert(res.message || 'Login gagal');
+          errorMsg.textContent = data.message || "Login gagal";
         }
       })
-      .catch(err => {
-        console.error(err);
-        alert('Terjadi kesalahan koneksi');
+      .catch(() => {
+        errorMsg.textContent = "Gagal terhubung ke server.";
       });
-  }
+    }
   </script>
 </body>
 </html>
