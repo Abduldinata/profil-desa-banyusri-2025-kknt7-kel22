@@ -22,6 +22,10 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+
 // Auto-buat tabel pengaduan
 (async () => {
   try {
@@ -37,6 +41,7 @@ const pool = new Pool({
         judul_pengaduan VARCHAR(200),
         isi_pengaduan TEXT,
         harapan TEXT,
+        status VARCHAR(50) DEFAULT 'Menunggu',
         tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -47,10 +52,8 @@ const pool = new Pool({
 })();
 
 // Auto-buat tabel admin
-// Pastikan tabel admin ada untuk menyimpan akun admin
 (async () => {
   try {
-    // Buat tabel admin jika belum ada
     await pool.query(`
       CREATE TABLE IF NOT EXISTS admin (
         id SERIAL PRIMARY KEY,
@@ -59,14 +62,35 @@ const pool = new Pool({
       )
     `);
     console.log("✅ Tabel admin berhasil dibuat atau sudah ada.");
+    
+    // Buat admin default jika belum ada
+    const adminExists = await pool.query('SELECT * FROM admin WHERE username = $1', ['admin']);
+    if (adminExists.rows.length === 0) {
+      const hashedPassword = await bcrypt.hash('admin123', 10);
+      await pool.query('INSERT INTO admin (username, password) VALUES ($1, $2)', ['admin', hashedPassword]);
+      console.log("✅ Admin default berhasil dibuat: username=admin, password=admin123");
+    }
   } catch (err) {
     console.error("❌ Gagal membuat tabel admin:", err);
   }
 })();
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+// Middleware untuk autentikasi JWT
+function verifikasiAdmin(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ success: false, message: 'Token tidak ada' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.admin = decoded;
+    next();
+  } catch (err) {
+    return res.status(403).json({ success: false, message: 'Token tidak valid' });
+  }
+}
 
 // Simpan OTP sementara
 const otpStore = {};
@@ -83,7 +107,7 @@ app.post('/kirim-otp', async (req, res) => {
   otpStore[email] = otp;
 
   try {
-    const transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -140,7 +164,7 @@ app.post('/kirim-pengaduan', async (req, res) => {
     ]);
 
     // Kirim email ke admin/balai desa
-    const transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -178,77 +202,6 @@ PENGADUAN BARU MASUK
   }
 });
 
-// Ambil semua pengaduan untuk admin
-app.get('/admin/pengaduan', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM pengaduan ORDER BY tanggal DESC');
-    res.json({ success: true, data: result.rows });
-  } catch (err) {
-    console.error('❌ Gagal ambil data pengaduan:', err);
-    res.status(500).json({ success: false, message: 'Gagal ambil data pengaduan' });
-  }
-});
-
-// Ambil detail pengaduan berdasarkan ID
-app.put('/admin/pengaduan/:id/status', async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-
-  try {
-    const result = await pool.query('SELECT * FROM pengaduan WHERE id = $1', [id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, message: 'Pengaduan tidak ditemukan' });
-    }
-
-    const data = result.rows[0];
-
-    await pool.query('UPDATE pengaduan SET status = $1 WHERE id = $2', [status, id]);
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
-
-    await transporter.sendMail({
-      from: `"Pengaduan Desa Banyusri" <${process.env.EMAIL_USER}>`,
-      to: data.email,
-      subject: `📬 Status Pengaduan Anda: ${status.toUpperCase()}`,
-      html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:auto;padding:1.5rem;border:1px solid #eee;border-radius:8px;">
-          <h2 style="color:#2c3e50;">📋 Pengaduan Anda Telah Diperbarui</h2>
-          <p>Halo <strong>${data.nama}</strong>,</p>
-
-          <p>Pengaduan Anda dengan judul:</p>
-          <blockquote style="background:#f9f9f9;padding:10px;border-left:4px solid #3498db;">
-            ${data.judul_pengaduan}
-          </blockquote>
-
-          <p>Status terbaru:</p>
-          <p>
-            <span style="background:#3498db;color:#fff;padding:8px 14px;border-radius:5px;font-weight:bold;">
-              ${status.toUpperCase()}
-            </span>
-          </p>
-
-          <p style="margin-top:1rem;">Terima kasih atas partisipasi Anda untuk kemajuan <strong>Desa Banyusri</strong> 🙏</p>
-
-          <hr style="margin:2rem 0;">
-          <p style="font-size:0.85rem;color:#666;">Email ini dikirim otomatis oleh Sistem Pengaduan Online Desa Banyusri. Jangan balas email ini.</p>
-        </div>
-      `
-    });
-
-    res.json({ success: true, message: 'Status berhasil diperbarui & email terkirim.' });
-
-  } catch (err) {
-    console.error('❌ Gagal ubah status / kirim email:', err);
-    res.status(500).json({ success: false, message: 'Gagal memperbarui status atau kirim email' });
-  }
-});
-
 // Endpoint untuk login admin
 app.post('/admin/login', async (req, res) => {
   const { username, password } = req.body;
@@ -265,54 +218,140 @@ app.post('/admin/login', async (req, res) => {
     }
 
     // Buat JWT token
-    const token = jwt.sign({ id: admin.id, username: admin.username }, SECRET_KEY, { expiresIn: '1h' });
-    res.json({ success: true, token });
+    const token = jwt.sign({ id: admin.id, username: admin.username }, SECRET_KEY, { expiresIn: '8h' });
+    res.json({ success: true, token, username: admin.username });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Kesalahan server' });
   }
 });
-// Middleware untuk autentikasi JWT
-function verifikasiAdmin(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ success: false, message: 'Token tidak ada' });
-  }
 
-// Ambil token dari header
-  app.get('/admin/pengaduan', verifikasiAdmin, async (req, res) => {
-  const result = await pool.query('SELECT * FROM pengaduan ORDER BY tanggal DESC');
-  res.json({ success: true, data: result.rows });
+// Ambil semua pengaduan untuk admin (dengan autentikasi)
+app.get('/admin/pengaduan', verifikasiAdmin, async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM pengaduan ORDER BY tanggal DESC');
+    res.json({ success: true, data: result.rows });
+  } catch (err) {
+    console.error('❌ Gagal ambil data pengaduan:', err);
+    res.status(500).json({ success: false, message: 'Gagal ambil data pengaduan' });
+  }
 });
 
+// Update status pengaduan (dengan autentikasi)
 app.put('/admin/pengaduan/:id/status', verifikasiAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
   try {
+    const result = await pool.query('SELECT * FROM pengaduan WHERE id = $1', [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pengaduan tidak ditemukan' });
+    }
+
+    const data = result.rows[0];
+
     await pool.query('UPDATE pengaduan SET status = $1 WHERE id = $2', [status, id]);
-    res.json({ success: true, message: 'Status diperbarui' });
+
+    // Kirim email notifikasi jika ada email
+    if (data.email) {
+      try {
+        const transporter = nodemailer.createTransporter({
+          service: 'gmail',
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+          }
+        });
+
+        await transporter.sendMail({
+          from: `"Pengaduan Desa Banyusri" <${process.env.EMAIL_USER}>`,
+          to: data.email,
+          subject: `📬 Status Pengaduan Anda: ${status.toUpperCase()}`,
+          html: `
+            <div style="font-family:sans-serif;max-width:600px;margin:auto;padding:1.5rem;border:1px solid #eee;border-radius:8px;">
+              <h2 style="color:#2c3e50;">📋 Pengaduan Anda Telah Diperbarui</h2>
+              <p>Halo <strong>${data.nama}</strong>,</p>
+
+              <p>Pengaduan Anda dengan judul:</p>
+              <blockquote style="background:#f9f9f9;padding:10px;border-left:4px solid #3498db;">
+                ${data.judul_pengaduan}
+              </blockquote>
+
+              <p>Status terbaru:</p>
+              <p>
+                <span style="background:#3498db;color:#fff;padding:8px 14px;border-radius:5px;font-weight:bold;">
+                  ${status.toUpperCase()}
+                </span>
+              </p>
+
+              <p style="margin-top:1rem;">Terima kasih atas partisipasi Anda untuk kemajuan <strong>Desa Banyusri</strong> 🙏</p>
+
+              <hr style="margin:2rem 0;">
+              <p style="font-size:0.85rem;color:#666;">Email ini dikirim otomatis oleh Sistem Pengaduan Online Desa Banyusri. Jangan balas email ini.</p>
+            </div>
+          `
+        });
+      } catch (emailError) {
+        console.log('⚠️ Gagal kirim email notifikasi:', emailError);
+      }
+    }
+
+    res.json({ success: true, message: 'Status berhasil diperbarui.' });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Gagal update status' });
+    console.error('❌ Gagal ubah status:', err);
+    res.status(500).json({ success: false, message: 'Gagal memperbarui status' });
   }
 });
 
 
-  const token = authHeader.split(' ')[1];
+// Endpoint untuk mendapatkan statistik dashboard
+app.get('/admin/stats', verifikasiAdmin, async (req, res) => {
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    req.admin = decoded;
-    next();
+    // Gunakan satu query untuk konsistensi data
+    const result = await pool.query(`
+      SELECT 
+        COUNT(*) as total,
+        COUNT(CASE WHEN UPPER(TRIM(COALESCE(status, 'MENUNGGU'))) = 'MENUNGGU' THEN 1 END) as menunggu,
+        COUNT(CASE WHEN UPPER(TRIM(COALESCE(status, ''))) = 'DIPROSES' THEN 1 END) as diproses,
+        COUNT(CASE WHEN UPPER(TRIM(COALESCE(status, ''))) = 'SELESAI' THEN 1 END) as selesai
+      FROM pengaduan
+    `);
+
+    const stats = result.rows[0];
+    
+    // Debug logging
+    console.log('📊 Stats raw data:', stats);
+    
+    const data = {
+      total: parseInt(stats.total) || 0,
+      menunggu: parseInt(stats.menunggu) || 0,
+      diproses: parseInt(stats.diproses) || 0,
+      selesai: parseInt(stats.selesai) || 0
+    };
+    
+    console.log('📊 Stats processed:', data);
+
+    res.json({
+      success: true,
+      data: data
+    });
+    
   } catch (err) {
-    return res.status(403).json({ success: false, message: 'Token tidak valid' });
+    console.error('❌ Gagal ambil statistik:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Gagal ambil statistik',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
-}
+});
 
 // Jalankan server
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di port ${PORT}`);
 });
+
 // Tangani error global
 process.on('uncaughtException', (error) => {
   console.error('❌ Uncaught Exception:', error);

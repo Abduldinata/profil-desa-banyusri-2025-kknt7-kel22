@@ -67,21 +67,84 @@
 
     let pengaduanData = []; // Store data for export
 
-    // Load statistics
+    // Function untuk menghitung statistik manual dari data pengaduan
+    function calculateStats(data) {
+      const stats = {
+        total: data.length,
+        menunggu: 0,
+        diproses: 0,
+        selesai: 0
+      };
+      
+      data.forEach(item => {
+        const status = (item.status || "menunggu").toLowerCase().trim();
+        switch (status) {
+          case "menunggu":
+          case "pending":
+          case "":
+            stats.menunggu++;
+            break;
+          case "diproses":
+          case "processing":
+            stats.diproses++;
+            break;
+          case "selesai":
+          case "completed":
+          case "done":
+            stats.selesai++;
+            break;
+          default:
+            console.log("Unknown status:", item.status);
+            stats.menunggu++; // Default ke menunggu
+        }
+      });
+      
+      return stats;
+    }
+
+    // Function untuk update tampilan statistik
+    function updateStatsDisplay(stats) {
+      document.getElementById("total-count").textContent = stats.total;
+      document.getElementById("menunggu-count").textContent = stats.menunggu;
+      document.getElementById("diproses-count").textContent = stats.diproses;
+      document.getElementById("selesai-count").textContent = stats.selesai;
+      
+      console.log("📊 Stats updated:", stats);
+    }
+
+    // Load statistics dengan debug
     function loadStats() {
+      console.log("🔄 Loading stats from API...");
+      
       fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/stats", {
         headers: { Authorization: "Bearer " + token }
       })
-      .then(res => res.json())
+      .then(res => {
+        console.log("📡 Stats API Response status:", res.status);
+        return res.json();
+      })
       .then(data => {
-        if (data.success) {
-          document.getElementById("total-count").textContent = data.data.total;
-          document.getElementById("menunggu-count").textContent = data.data.menunggu;
-          document.getElementById("diproses-count").textContent = data.data.diproses;
-          document.getElementById("selesai-count").textContent = data.data.selesai;
+        console.log("📊 Stats API Response:", data);
+        
+        if (data.success && data.data) {
+          updateStatsDisplay(data.data);
+        } else {
+          console.warn("⚠️ Stats API failed, calculating manually from pengaduan data");
+          if (pengaduanData.length > 0) {
+            const manualStats = calculateStats(pengaduanData);
+            updateStatsDisplay(manualStats);
+          }
         }
       })
-      .catch(error => console.error('Error loading stats:', error));
+      .catch(error => {
+        console.error('❌ Error loading stats:', error);
+        // Fallback ke perhitungan manual jika API gagal
+        if (pengaduanData.length > 0) {
+          console.log("📊 Using manual calculation as fallback");
+          const manualStats = calculateStats(pengaduanData);
+          updateStatsDisplay(manualStats);
+        }
+      });
     }
 
     // Load pengaduan data
@@ -104,6 +167,12 @@
       .then(data => {
         if (data && data.success) {
           pengaduanData = data.data; // Store for export
+          console.log("📋 Pengaduan data loaded:", pengaduanData.length, "items");
+          
+          // Hitung dan update statistik manual terlebih dahulu
+          const manualStats = calculateStats(pengaduanData);
+          updateStatsDisplay(manualStats);
+          
           list.innerHTML = "";
           if (data.data.length === 0) {
             list.innerHTML = '<div class="empty-state"><p>🗂️ Tidak ada pengaduan saat ini.</p></div>';
@@ -170,7 +239,9 @@
               list.appendChild(card);
             });
           }
-          loadStats(); // Refresh stats after loading data
+          
+          // Coba load stats dari API juga
+          loadStats();
         } else {
           list.innerHTML = '<div class="empty-state"><p>❌ Gagal memuat data pengaduan.</p></div>';
         }
