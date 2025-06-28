@@ -1,13 +1,16 @@
 require('dotenv').config();
 
-const express = require('express');
 const nodemailer = require('nodemailer');
+const express = require('express');
 const cors = require('cors');
+const app = express();
+app.use(cors({
+  origin: 'https://profil-desa-banyusri-2025-kknt7-kel.vercel.app'
+}));
+
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
-// Inisialisasi Express
-const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Koneksi PostgreSQL
