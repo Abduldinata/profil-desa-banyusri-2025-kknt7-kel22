@@ -11,7 +11,7 @@ app.use(cors({
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); // ADD THIS LINE!
+const jwt = require('jsonwebtoken');
 const PORT = process.env.PORT || 8080;
 
 // Gunakan crypto untuk generate secret yang aman
@@ -23,7 +23,6 @@ if (!SECRET_KEY) {
   console.error('❌ JWT_SECRET required!');
   process.exit(1);
 }
-
 
 // Koneksi PostgreSQL
 const pool = new Pool({
@@ -101,56 +100,162 @@ function verifikasiAdmin(req, res, next) {
   }
 }
 
-// Simpan OTP sementara
+// Simpan OTP sementara dengan expiry
 const otpStore = {};
 
-// Endpoint kirim OTP ke email user
+// ✅ ENDPOINT KIRIM OTP YANG SUDAH DIPERBAIKI
 app.post('/kirim-otp', async (req, res) => {
   const { email } = req.body;
 
+  // Validasi input
   if (!email || !email.includes('@')) {
-    return res.status(400).json({ success: false, message: 'Email tidak valid' });
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Email tidak valid' 
+    });
   }
 
+  // Generate OTP
   const otp = Math.floor(100000 + Math.random() * 900000);
-  otpStore[email] = otp;
+  otpStore[email] = {
+    code: otp,
+    timestamp: Date.now(),
+    expires: Date.now() + (5 * 60 * 1000) // 5 menit
+  };
 
   try {
-    const transporter = nodemailer.createTransporter({
+    // Validasi environment variables
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('❌ Environment variables EMAIL_USER atau EMAIL_PASS tidak ditemukan');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Konfigurasi email tidak lengkap' 
+      });
+    }
+
+    // ✅ PERBAIKAN: Gunakan createTransport (bukan createTransporter)
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        pass: process.env.EMAIL_PASS // Harus menggunakan App Password dari Gmail
       }
     });
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    // Verifikasi koneksi transporter
+    await transporter.verify();
+    console.log('✅ Koneksi email berhasil diverifikasi');
+
+    // Kirim email OTP
+    const mailOptions = {
+      from: `"Desa Banyusri" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Kode OTP Verifikasi - Desa Banyusri',
-      text: `Kode verifikasi Anda adalah: ${otp}`
+      subject: '🔐 Kode OTP Verifikasi - Desa Banyusri',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+          <h2 style="color: #2c3e50; text-align: center;">🏘️ Desa Banyusri</h2>
+          <h3 style="color: #3498db;">Kode Verifikasi OTP</h3>
+          
+          <p>Halo,</p>
+          <p>Anda telah meminta kode verifikasi untuk mengakses layanan pengaduan online Desa Banyusri.</p>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; margin: 20px 0;">
+            <h1 style="color: #2c3e50; font-size: 32px; margin: 0; letter-spacing: 3px;">${otp}</h1>
+          </div>
+          
+          <p><strong>Catatan penting:</strong></p>
+          <ul>
+            <li>Kode ini akan kedaluwarsa dalam <strong>5 menit</strong></li>
+            <li>Jangan bagikan kode ini kepada siapapun</li>
+            <li>Gunakan kode ini hanya untuk verifikasi di website resmi Desa Banyusri</li>
+          </ul>
+          
+          <p>Jika Anda tidak merasa meminta kode ini, abaikan email ini.</p>
+          
+          <hr style="margin: 20px 0;">
+          <p style="font-size: 12px; color: #666;">
+            Email otomatis dari Sistem Pengaduan Online Desa Banyusri<br>
+            Kecamatan Wonosegoro, Kabupaten Boyolali
+          </p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    console.log(`✅ OTP berhasil dikirim ke ${email}: ${otp}`);
+    res.json({ 
+      success: true, 
+      message: 'Kode OTP berhasil dikirim ke email Anda. Silakan cek inbox atau folder spam.' 
     });
 
-    res.json({ success: true, message: 'Kode OTP berhasil dikirim.' });
   } catch (error) {
-    console.error('❌ Gagal kirim OTP:', error);
-    res.status(500).json({ success: false, message: 'Gagal mengirim OTP.' });
+    console.error('❌ Error detail saat kirim OTP:', error);
+    
+    // Berikan response error yang lebih spesifik
+    let errorMessage = 'Gagal mengirim OTP';
+    
+    if (error.code === 'EAUTH') {
+      errorMessage = 'Autentikasi email gagal. Periksa username dan App Password Gmail.';
+    } else if (error.code === 'ECONNECTION') {
+      errorMessage = 'Tidak dapat terhubung ke server email.';
+    } else if (error.response && error.response.includes('Invalid login')) {
+      errorMessage = 'Login email tidak valid. Periksa username dan password.';
+    }
+    
+    res.status(500).json({ 
+      success: false, 
+      message: errorMessage,
+      debug: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
-// Endpoint verifikasi OTP
+// ✅ ENDPOINT VERIFIKASI OTP YANG SUDAH DIPERBAIKI
 app.post('/verifikasi-otp', (req, res) => {
   const { email, otp } = req.body;
 
-  if (otpStore[email] && otpStore[email].toString() === otp) {
-    delete otpStore[email];
-    return res.json({ success: true, message: 'OTP berhasil diverifikasi.' });
+  if (!email || !otp) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Email dan OTP harus diisi' 
+    });
   }
 
-  return res.status(400).json({ success: false, message: 'OTP tidak valid atau sudah kadaluarsa.' });
+  const storedOtp = otpStore[email];
+  
+  if (!storedOtp) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'OTP tidak ditemukan atau sudah kadaluarsa' 
+    });
+  }
+
+  // Cek apakah OTP sudah kedaluwarsa
+  if (Date.now() > storedOtp.expires) {
+    delete otpStore[email];
+    return res.status(400).json({ 
+      success: false, 
+      message: 'OTP sudah kedaluwarsa. Silakan minta kode baru.' 
+    });
+  }
+
+  // Verifikasi OTP
+  if (storedOtp.code.toString() === otp.toString()) {
+    delete otpStore[email];
+    return res.json({ 
+      success: true, 
+      message: 'OTP berhasil diverifikasi.' 
+    });
+  }
+
+  return res.status(400).json({ 
+    success: false, 
+    message: 'Kode OTP tidak valid.' 
+  });
 });
 
-// Endpoint simpan pengaduan dan kirim ke email desa
+// Endpoint simpan pengaduan dan kirim ke email desa (DIPERBAIKI)
 app.post('/kirim-pengaduan', async (req, res) => {
   const data = req.body;
 
@@ -172,8 +277,8 @@ app.post('/kirim-pengaduan', async (req, res) => {
       data.harapan
     ]);
 
-    // Kirim email ke admin/balai desa
-    const transporter = nodemailer.createTransporter({
+    // ✅ PERBAIKAN: Kirim email ke admin/balai desa
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -246,7 +351,7 @@ app.get('/admin/pengaduan', verifikasiAdmin, async (req, res) => {
   }
 });
 
-// Update status pengaduan (dengan autentikasi)
+// Update status pengaduan (dengan autentikasi) - DIPERBAIKI
 app.put('/admin/pengaduan/:id/status', verifikasiAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -264,7 +369,8 @@ app.put('/admin/pengaduan/:id/status', verifikasiAdmin, async (req, res) => {
     // Kirim email notifikasi jika ada email
     if (data.email) {
       try {
-        const transporter = nodemailer.createTransporter({
+        // ✅ PERBAIKAN: createTransport bukan createTransporter
+        const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
             user: process.env.EMAIL_USER,
@@ -313,7 +419,6 @@ app.put('/admin/pengaduan/:id/status', verifikasiAdmin, async (req, res) => {
   }
 });
 
-
 // Endpoint untuk mendapatkan statistik dashboard
 app.get('/admin/stats', verifikasiAdmin, async (req, res) => {
   try {
@@ -355,6 +460,17 @@ app.get('/admin/stats', verifikasiAdmin, async (req, res) => {
     });
   }
 });
+
+// ✅ Cleanup expired OTPs setiap 10 menit
+setInterval(() => {
+  const now = Date.now();
+  Object.keys(otpStore).forEach(email => {
+    if (otpStore[email].expires < now) {
+      delete otpStore[email];
+      console.log(`🧹 OTP untuk ${email} sudah dihapus karena kedaluwarsa`);
+    }
+  });
+}, 10 * 60 * 1000);
 
 // Jalankan server
 app.listen(PORT, () => {
