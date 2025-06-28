@@ -6,116 +6,147 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f8;
-  color: #2c3e50;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
   padding: 2rem;
 }
 
-/* Header */
-.admin-container h1 {
-  margin-bottom: 1rem;
-  font-size: 2rem;
-  color: #34495e;
-}
-
-/* Logout button */
-.admin-container button {
-  padding: 0.6rem 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  background-color: #e74c3c;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-bottom: 2rem;
-}
-
-.admin-container button:hover {
-  background-color: #c0392b;
-}
-
-/* Card style */
-.pengaduan-card {
-  background-color: white;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 2rem;
-  border-left: 5px solid #3498db;
-  transition: transform 0.2s ease;
-}
-
-.pengaduan-card:hover {
-  transform: translateY(-2px);
-}
-
-.pengaduan-card h3 {
+/* Judul */
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
   color: #2c3e50;
-  margin-bottom: 0.5rem;
 }
 
-.pengaduan-card p {
-  margin: 0.25rem 0;
+/* Tabel */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eaeaea;
+  text-align: left;
   font-size: 0.95rem;
 }
 
-.status {
-  font-weight: bold;
-  color: #3498db;
+th {
+  background-color: #3498db;
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
 
-/* Status Button Group */
-.btn-status {
-  margin-top: 1rem;
-  display: flex;
-  gap: 0.75rem;
+tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-.btn-status button {
-  padding: 0.5rem 0.75rem;
+/* Select (dropdown status) */
+select {
+  padding: 6px 10px;
   font-size: 0.9rem;
-  font-weight: bold;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
-.btn-diproses {
-  background-color: #f1c40f;
-  color: #2c3e50;
+select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 3px rgba(52, 152, 219, 0.5);
 }
 
-.btn-selesai {
+/* Alerts */
+.alert {
+  padding: 12px;
+  margin: 1rem 0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.alert.success {
   background-color: #2ecc71;
   color: white;
 }
 
-.btn-diproses:hover {
-  background-color: #d4ac0d;
+.alert.error {
+  background-color: #e74c3c;
+  color: white;
+}
+.alert.info {
+  background-color: #3498db;
+  color: white;
+}
+    .pengaduan-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-left: 5px solid #3498db;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .pengaduan-card h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    .status {
+      font-weight: bold;
+      color: #3498db;
+    }
+    .btn-status {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn-status button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-menunggu {
+      background-color: #e67e22;
+      color: white;
+    }
+    .btn-diproses {
+      background-color: #f1c40f;
+      color: black;
+    }
+    .btn-selesai {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    /* Status Berwarna */
+.status {
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 0.9rem;
+  text-transform: uppercase;
 }
 
-.btn-selesai:hover {
-  background-color: #27ae60;
+/* Warna berdasarkan status */
+.status-menunggu {
+  background-color: #bdc3c7;  /* abu-abu */
+  color: #2c3e50;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  body {
-    padding: 1rem;
-  }
+.status-diproses {
+  background-color: #f1c40f;  /* kuning */
+  color: #2c3e50;
+}
 
-  .admin-container h1 {
-    font-size: 1.5rem;
-  }
-
-  .pengaduan-card {
-    padding: 1rem;
-  }
-
-  .btn-status {
-    flex-direction: column;
-  }
+.status-selesai {
+  background-color: #2ecc71;  /* hijau */
+  color: white;
 }

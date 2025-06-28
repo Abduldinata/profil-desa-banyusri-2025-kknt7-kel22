@@ -38,7 +38,7 @@
               <p><strong>Alamat:</strong> ${item.alamat}</p>
               <p><strong>Jenis:</strong> ${item.jenis_pengaduan}</p>
               <p><strong>Isi:</strong> ${item.isi_pengaduan}</p>
-              <p><strong>Status:</strong> <span class="status" id="status-${item.id}">${item.status || "Menunggu"}</span></p>
+              <p><strong>Status:</strong> <span class="status ${getStatusClass(item.status)}" id="status-${item.id}">${item.status || "Menunggu"}</span></p>
               <div class="btn-status">
                 <button class="btn-diproses" onclick="ubahStatus(${item.id}, 'Diproses')">✅ Proses</button>
                 <button class="btn-selesai" onclick="ubahStatus(${item.id}, 'Selesai')">🎉 Selesai</button>
@@ -51,6 +51,14 @@
         alert("Gagal memuat data pengaduan");
       }
     });
+
+    function getStatusClass(status) {
+  switch ((status || "Menunggu").toLowerCase()) {
+    case "diproses": return "status-diproses";
+    case "selesai": return "status-selesai";
+    default: return "status-menunggu";
+  }
+}
 
     function ubahStatus(id, status) {
       fetch(`https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan/${id}/status`, {
