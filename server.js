@@ -11,6 +11,7 @@ app.use(cors({
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // ADD THIS LINE!
 const PORT = process.env.PORT || 8080;
 
 // Gunakan crypto untuk generate secret yang aman
