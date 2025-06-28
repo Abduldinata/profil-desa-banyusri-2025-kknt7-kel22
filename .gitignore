@@ -1,2 +1,4 @@
-.env
-node_modules/
+echo "node_modules/" >> .gitignore
+echo ".env" >> .gitignore
+echo "*.log" >> .gitignore
+echo "dist/" >> .gitignore  
