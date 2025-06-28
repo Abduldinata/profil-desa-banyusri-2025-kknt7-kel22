@@ -10,8 +10,50 @@
   <div class="admin-container">
     <!-- Header -->
     <div class="admin-header">
-      <h1>📋 Dashboard Pengaduan</h1>
+      <div class="header-left">
+        <h1>📋 Dashboard Admin</h1>
+        <p class="admin-subtitle">🏘️ Sistem Pengaduan Desa Banyusri</p>
+        <p class="welcome-text">Selamat datang, <span id="admin-name">Admin</span>!</p>
+      </div>
       <button class="logout-btn" onclick="logout()">🔓 Logout</button>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-container">
+      <div class="stat-card total">
+        <div class="stat-icon">📊</div>
+        <div class="stat-info">
+          <h3 id="total-count">0</h3>
+          <p>Total Pengaduan</p>
+        </div>
+      </div>
+      <div class="stat-card menunggu">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-info">
+          <h3 id="menunggu-count">0</h3>
+          <p>Menunggu</p>
+        </div>
+      </div>
+      <div class="stat-card diproses">
+        <div class="stat-icon">🔄</div>
+        <div class="stat-info">
+          <h3 id="diproses-count">0</h3>
+          <p>Diproses</p>
+        </div>
+      </div>
+      <div class="stat-card selesai">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <h3 id="selesai-count">0</h3>
+          <p>Selesai</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Title -->
+    <div class="section-header">
+      <h2>📝 Daftar Pengaduan Masyarakat</h2>
+      <button class="refresh-btn" onclick="loadPengaduan()">🔄 Refresh</button>
     </div>
     
     <!-- Pengaduan List -->
@@ -22,45 +64,118 @@
     const token = localStorage.getItem("admin_token");
     if (!token) window.location.href = "login.html";
 
-    fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan", {
-      headers: { Authorization: "Bearer " + token }
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        const list = document.getElementById("pengaduan-list");
-        if (data.data.length === 0) {
-          list.innerHTML = '<div class="empty-state"><p>🗂️ Tidak ada pengaduan saat ini.</p></div>';
-        } else {
-          data.data.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "pengaduan-card";
-            card.innerHTML = `
-              <h3>${item.judul_pengaduan}</h3>
-              <p><strong>Nama:</strong> ${item.nama}</p>
-              <p><strong>NIK:</strong> ${item.nik}</p>
-              <p><strong>Telepon:</strong> ${item.telepon}</p>
-              <p><strong>Alamat:</strong> ${item.alamat}</p>
-              <p><strong>Jenis:</strong> ${item.jenis_pengaduan}</p>
-              <p><strong>Isi:</strong> ${item.isi_pengaduan}</p>
-              <p><strong>Status:</strong> <span class="status ${getStatusClass(item.status)}" id="status-${item.id}">${item.status || "Menunggu"}</span></p>
-              <div class="btn-status">
-                <button class="btn-diproses" onclick="ubahStatus(${item.id}, 'Diproses')">🔄 Proses</button>
-                <button class="btn-selesai" onclick="ubahStatus(${item.id}, 'Selesai')">✅ Selesai</button>
-              </div>
-            `;
-            list.appendChild(card);
-          });
+    // Load statistics
+    function loadStats() {
+      fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/stats", {
+        headers: { Authorization: "Bearer " + token }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById("total-count").textContent = data.data.total;
+          document.getElementById("menunggu-count").textContent = data.data.menunggu;
+          document.getElementById("diproses-count").textContent = data.data.diproses;
+          document.getElementById("selesai-count").textContent = data.data.selesai;
         }
-      } else {
-        alert("Gagal memuat data pengaduan");
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      document.getElementById("pengaduan-list").innerHTML = 
-        '<div class="empty-state"><p>❌ Terjadi kesalahan saat memuat data.</p></div>';
-    });
+      })
+      .catch(error => console.error('Error loading stats:', error));
+    }
+
+    // Load pengaduan data
+    function loadPengaduan() {
+      const list = document.getElementById("pengaduan-list");
+      list.innerHTML = '<div class="loading-state"><p>⏳ Memuat data pengaduan...</p></div>';
+
+      fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan", {
+        headers: { Authorization: "Bearer " + token }
+      })
+      .then(res => {
+        if (res.status === 401 || res.status === 403) {
+          alert("Sesi login telah berakhir. Silakan login kembali.");
+          localStorage.removeItem("admin_token");
+          window.location.href = "login.html";
+          return;
+        }
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.success) {
+          list.innerHTML = "";
+          if (data.data.length === 0) {
+            list.innerHTML = '<div class="empty-state"><p>🗂️ Tidak ada pengaduan saat ini.</p></div>';
+          } else {
+            data.data.forEach(item => {
+              const card = document.createElement("div");
+              card.className = "pengaduan-card";
+              const tanggal = new Date(item.tanggal).toLocaleString('id-ID');
+              card.innerHTML = `
+                <div class="card-header">
+                  <h3>${item.judul_pengaduan}</h3>
+                  <span class="tanggal">📅 ${tanggal}</span>
+                </div>
+                <div class="card-body">
+                  <div class="info-grid">
+                    <div class="info-item">
+                      <span class="info-label">👤 Nama:</span>
+                      <span class="info-value">${item.nama}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">🪪 NIK:</span>
+                      <span class="info-value">${item.nik}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">📞 Telepon:</span>
+                      <span class="info-value">${item.telepon}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">📧 Email:</span>
+                      <span class="info-value">${item.email || 'Tidak diisi'}</span>
+                    </div>
+                    <div class="info-item full-width">
+                      <span class="info-label">📍 Alamat:</span>
+                      <span class="info-value">${item.alamat}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">📋 Jenis:</span>
+                      <span class="info-value">${item.jenis_pengaduan}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="info-label">⚡ Status:</span>
+                      <span class="status ${getStatusClass(item.status)}" id="status-${item.id}">${item.status || "Menunggu"}</span>
+                    </div>
+                  </div>
+                  <div class="isi-pengaduan">
+                    <span class="info-label">📝 Isi Pengaduan:</span>
+                    <p class="isi-text">${item.isi_pengaduan}</p>
+                  </div>
+                  ${item.harapan ? `
+                    <div class="harapan">
+                      <span class="info-label">🎯 Harapan:</span>
+                      <p class="harapan-text">${item.harapan}</p>
+                    </div>
+                  ` : ''}
+                </div>
+                <div class="btn-status">
+                  <button class="btn-diproses" onclick="ubahStatus(${item.id}, 'Diproses')" ${item.status === 'Diproses' ? 'disabled' : ''}>🔄 Proses</button>
+                  <button class="btn-selesai" onclick="ubahStatus(${item.id}, 'Selesai')" ${item.status === 'Selesai' ? 'disabled' : ''}>✅ Selesai</button>
+                </div>
+              `;
+              list.appendChild(card);
+            });
+          }
+          loadStats(); // Refresh stats after loading data
+        } else {
+          list.innerHTML = '<div class="empty-state"><p>❌ Gagal memuat data pengaduan.</p></div>';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        list.innerHTML = '<div class="empty-state"><p>❌ Terjadi kesalahan saat memuat data.</p></div>';
+      });
+    }
+
+    // Initialize
+    loadPengaduan();
 
     function getStatusClass(status) {
       switch ((status || "Menunggu").toLowerCase()) {
