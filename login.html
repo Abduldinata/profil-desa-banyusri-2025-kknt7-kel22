@@ -63,18 +63,29 @@
   </div>
 
   <script>
-    function login() {
-      const user = document.getElementById('username').value.trim();
-      const pass = document.getElementById('password').value.trim();
+  function login() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-      // Username dan password bisa kamu ganti sesuai kebutuhan
-      if (user === 'admin' && pass === 'banyusri2025') {
-        localStorage.setItem('adminLogin', 'true');
-        window.location.href = 'admin.html';
-      } else {
-        document.getElementById('error-msg').textContent = 'Username atau Password salah!';
-      }
-    }
+    fetch('https://https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          localStorage.setItem('admin_token', res.token);
+          window.location.href = 'admin.html';
+        } else {
+          alert(res.message || 'Login gagal');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Terjadi kesalahan koneksi');
+      });
+  }
   </script>
 </body>
 </html>

@@ -5,7 +5,8 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
-
+const bcrypt = require('bcrypt');
+// Inisialisasi Express
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -242,6 +243,31 @@ app.put('/admin/pengaduan/:id/status', async (req, res) => {
   }
 });
 
+// Endpoint untuk login admin
+app.post('/admin/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const result = await pool.query('SELECT * FROM admin WHERE username = $1', [username]);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ success: false, message: 'Username tidak ditemukan' });
+    }
+
+    const admin = result.rows[0];
+    const valid = await bcrypt.compare(password, admin.password);
+
+    if (!valid) {
+      return res.status(401).json({ success: false, message: 'Password salah' });
+    }
+
+    // Sukses login
+    res.json({ success: true, message: 'Login berhasil', token: 'admin-valid-token' });
+  } catch (err) {
+    console.error('❌ Login error:', err);
+    res.status(500).json({ success: false, message: 'Kesalahan server saat login' });
+  }
+});
 
 
 // Jalankan server
