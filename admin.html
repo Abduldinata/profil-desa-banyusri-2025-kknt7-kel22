@@ -15,11 +15,8 @@
 
   <script>
     const token = localStorage.getItem("admin_token");
-    if (!token) {
-      window.location.href = "login.html";
-    }
+    if (!token) window.location.href = "login.html";
 
-    // Ambil data pengaduan
     fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan", {
       headers: { Authorization: "Bearer " + token }
     })
@@ -41,12 +38,11 @@
               <p><strong>Alamat:</strong> ${item.alamat}</p>
               <p><strong>Jenis:</strong> ${item.jenis_pengaduan}</p>
               <p><strong>Isi:</strong> ${item.isi_pengaduan}</p>
-              <p><strong>Status:</strong> <span id="status-${item.id}">${item.status || "Menunggu"}</span></p>
-              <select onchange="ubahStatus(${item.id}, this.value)">
-                <option value="Menunggu" ${item.status === "Menunggu" ? "selected" : ""}>Menunggu</option>
-                <option value="Diproses" ${item.status === "Diproses" ? "selected" : ""}>Diproses</option>
-                <option value="Selesai" ${item.status === "Selesai" ? "selected" : ""}>Selesai</option>
-              </select>
+              <p><strong>Status:</strong> <span class="status" id="status-${item.id}">${item.status || "Menunggu"}</span></p>
+              <div class="btn-status">
+                <button class="btn-diproses" onclick="ubahStatus(${item.id}, 'Diproses')">✅ Proses</button>
+                <button class="btn-selesai" onclick="ubahStatus(${item.id}, 'Selesai')">🎉 Selesai</button>
+              </div>
             `;
             list.appendChild(card);
           });
@@ -54,9 +50,6 @@
       } else {
         alert("Gagal memuat data pengaduan");
       }
-    })
-    .catch(() => {
-      alert("Gagal terhubung ke server");
     });
 
     function ubahStatus(id, status) {
@@ -72,9 +65,9 @@
       .then(data => {
         if (data.success) {
           document.getElementById("status-" + id).innerText = status;
-          alert("Status diperbarui");
+          alert("✅ Status diperbarui menjadi: " + status);
         } else {
-          alert("Gagal memperbarui status");
+          alert("❌ Gagal memperbarui status");
         }
       });
     }
