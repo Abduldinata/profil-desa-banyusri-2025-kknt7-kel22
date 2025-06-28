@@ -8,8 +8,13 @@
 </head>
 <body>
   <div class="admin-container">
-    <h1>📋 Dashboard Pengaduan</h1>
-    <button onclick="logout()">🔓 Logout</button>
+    <!-- Header -->
+    <div class="admin-header">
+      <h1>📋 Dashboard Pengaduan</h1>
+      <button class="logout-btn" onclick="logout()">🔓 Logout</button>
+    </div>
+    
+    <!-- Pengaduan List -->
     <div id="pengaduan-list"></div>
   </div>
 
@@ -25,7 +30,7 @@
       if (data.success) {
         const list = document.getElementById("pengaduan-list");
         if (data.data.length === 0) {
-          list.innerHTML = "<p>Tidak ada pengaduan saat ini.</p>";
+          list.innerHTML = '<div class="empty-state"><p>🗂️ Tidak ada pengaduan saat ini.</p></div>';
         } else {
           data.data.forEach(item => {
             const card = document.createElement("div");
@@ -40,8 +45,8 @@
               <p><strong>Isi:</strong> ${item.isi_pengaduan}</p>
               <p><strong>Status:</strong> <span class="status ${getStatusClass(item.status)}" id="status-${item.id}">${item.status || "Menunggu"}</span></p>
               <div class="btn-status">
-                <button class="btn-diproses" onclick="ubahStatus(${item.id}, 'Diproses')">✅ Proses</button>
-                <button class="btn-selesai" onclick="ubahStatus(${item.id}, 'Selesai')">🎉 Selesai</button>
+                <button class="btn-diproses" onclick="ubahStatus(${item.id}, 'Diproses')">🔄 Proses</button>
+                <button class="btn-selesai" onclick="ubahStatus(${item.id}, 'Selesai')">✅ Selesai</button>
               </div>
             `;
             list.appendChild(card);
@@ -50,17 +55,27 @@
       } else {
         alert("Gagal memuat data pengaduan");
       }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      document.getElementById("pengaduan-list").innerHTML = 
+        '<div class="empty-state"><p>❌ Terjadi kesalahan saat memuat data.</p></div>';
     });
 
     function getStatusClass(status) {
-  switch ((status || "Menunggu").toLowerCase()) {
-    case "diproses": return "status-diproses";
-    case "selesai": return "status-selesai";
-    default: return "status-menunggu";
-  }
-}
+      switch ((status || "Menunggu").toLowerCase()) {
+        case "diproses": return "status-diproses";
+        case "selesai": return "status-selesai";
+        default: return "status-menunggu";
+      }
+    }
 
     function ubahStatus(id, status) {
+      const button = event.target;
+      const originalText = button.innerHTML;
+      button.innerHTML = "⏳ Memproses...";
+      button.disabled = true;
+
       fetch(`https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan/${id}/status`, {
         method: "PUT",
         headers: {
@@ -72,17 +87,29 @@
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          document.getElementById("status-" + id).innerText = status;
-          alert("✅ Status diperbarui menjadi: " + status);
+          const statusElement = document.getElementById("status-" + id);
+          statusElement.innerText = status;
+          statusElement.className = `status ${getStatusClass(status)}`;
+          alert("✅ Status berhasil diperbarui menjadi: " + status);
         } else {
           alert("❌ Gagal memperbarui status");
         }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert("❌ Terjadi kesalahan saat memperbarui status");
+      })
+      .finally(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
       });
     }
 
     function logout() {
-      localStorage.removeItem("admin_token");
-      window.location.href = "login.html";
+      if (confirm("🔓 Apakah Anda yakin ingin logout?")) {
+        localStorage.removeItem("admin_token");
+        window.location.href = "login.html";
+      }
     }
   </script>
 </body>
