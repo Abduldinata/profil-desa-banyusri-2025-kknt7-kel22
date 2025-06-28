@@ -17,7 +17,11 @@ const PORT = process.env.PORT || 8080;
 const crypto = require('crypto');
 const jwtSecret = crypto.randomBytes(64).toString('hex');
 console.log(jwtSecret); // Copy ini ke environment variable
-
+const SECRET_KEY = process.env.JWT_SECRET;
+if (!SECRET_KEY) {
+  console.error('❌ JWT_SECRET required!');
+  process.exit(1);
+}
 
 
 // Koneksi PostgreSQL
