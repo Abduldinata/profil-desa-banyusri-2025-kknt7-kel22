@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Admin - Desa Banyusri</title>
   <link rel="stylesheet" href="css/admin.css" />
+  <!-- SheetJS untuk export Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="admin-container">
@@ -12,48 +14,47 @@
     <div class="admin-header">
       <div class="header-left">
         <h1>📋 Dashboard Admin</h1>
-        <p class="admin-subtitle">🏘️ Sistem Pengaduan Desa Banyusri</p>
+        <p class="admin-subtitle">Desa Banyusri</p>
         <p class="welcome-text">Selamat datang, <span id="admin-name">Admin</span>!</p>
       </div>
-      <button class="logout-btn" onclick="logout()">🔓 Logout</button>
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 
     <!-- Statistics Cards -->
     <div class="stats-container">
       <div class="stat-card total">
-        <div class="stat-icon">📊</div>
-        <div class="stat-info">
+        <div class="stat-content">
           <h3 id="total-count">0</h3>
           <p>Total Pengaduan</p>
         </div>
       </div>
       <div class="stat-card menunggu">
-        <div class="stat-icon">⏳</div>
-        <div class="stat-info">
+        <div class="stat-content">
           <h3 id="menunggu-count">0</h3>
           <p>Menunggu</p>
         </div>
       </div>
       <div class="stat-card diproses">
-        <div class="stat-icon">🔄</div>
-        <div class="stat-info">
+        <div class="stat-content">
           <h3 id="diproses-count">0</h3>
           <p>Diproses</p>
         </div>
       </div>
       <div class="stat-card selesai">
-        <div class="stat-icon">✅</div>
-        <div class="stat-info">
+        <div class="stat-content">
           <h3 id="selesai-count">0</h3>
           <p>Selesai</p>
         </div>
       </div>
     </div>
 
-    <!-- Section Title -->
+    <!-- Section Header -->
     <div class="section-header">
-      <h2>📝 Daftar Pengaduan Masyarakat</h2>
-      <button class="refresh-btn" onclick="loadPengaduan()">🔄 Refresh</button>
+      <h2>Daftar Pengaduan Masyarakat</h2>
+      <div class="header-actions">
+        <button class="export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+        <button class="refresh-btn" onclick="loadPengaduan()">🔄 Refresh</button>
+      </div>
     </div>
     
     <!-- Pengaduan List -->
@@ -63,6 +64,8 @@
   <script>
     const token = localStorage.getItem("admin_token");
     if (!token) window.location.href = "login.html";
+
+    let pengaduanData = []; // Store data for export
 
     // Load statistics
     function loadStats() {
@@ -100,6 +103,7 @@
       })
       .then(data => {
         if (data && data.success) {
+          pengaduanData = data.data; // Store for export
           list.innerHTML = "";
           if (data.data.length === 0) {
             list.innerHTML = '<div class="empty-state"><p>🗂️ Tidak ada pengaduan saat ini.</p></div>';
@@ -110,54 +114,57 @@
               const tanggal = new Date(item.tanggal).toLocaleString('id-ID');
               card.innerHTML = `
                 <div class="card-header">
-                  <h3>${item.judul_pengaduan}</h3>
-                  <span class="tanggal">📅 ${tanggal}</span>
+                  <div class="card-title">
+                    <h3>${item.judul_pengaduan}</h3>
+                    <span class="status ${getStatusClass(item.status)}" id="status-${item.id}">${item.status || "Menunggu"}</span>
+                  </div>
+                  <span class="tanggal">${tanggal}</span>
                 </div>
                 <div class="card-body">
-                  <div class="info-grid">
-                    <div class="info-item">
-                      <span class="info-label">👤 Nama:</span>
-                      <span class="info-value">${item.nama}</span>
+                  <div class="info-section">
+                    <div class="info-row">
+                      <span class="label">Nama:</span>
+                      <span class="value">${item.nama}</span>
                     </div>
-                    <div class="info-item">
-                      <span class="info-label">🪪 NIK:</span>
-                      <span class="info-value">${item.nik}</span>
+                    <div class="info-row">
+                      <span class="label">NIK:</span>
+                      <span class="value">${item.nik}</span>
                     </div>
-                    <div class="info-item">
-                      <span class="info-label">📞 Telepon:</span>
-                      <span class="info-value">${item.telepon}</span>
+                    <div class="info-row">
+                      <span class="label">Telepon:</span>
+                      <span class="value">${item.telepon}</span>
                     </div>
-                    <div class="info-item">
-                      <span class="info-label">📧 Email:</span>
-                      <span class="info-value">${item.email || 'Tidak diisi'}</span>
+                    <div class="info-row">
+                      <span class="label">Email:</span>
+                      <span class="value">${item.email || 'Tidak diisi'}</span>
                     </div>
-                    <div class="info-item full-width">
-                      <span class="info-label">📍 Alamat:</span>
-                      <span class="info-value">${item.alamat}</span>
+                    <div class="info-row">
+                      <span class="label">Alamat:</span>
+                      <span class="value">${item.alamat}</span>
                     </div>
-                    <div class="info-item">
-                      <span class="info-label">📋 Jenis:</span>
-                      <span class="info-value">${item.jenis_pengaduan}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="info-label">⚡ Status:</span>
-                      <span class="status ${getStatusClass(item.status)}" id="status-${item.id}">${item.status || "Menunggu"}</span>
+                    <div class="info-row">
+                      <span class="label">Jenis:</span>
+                      <span class="value">${item.jenis_pengaduan}</span>
                     </div>
                   </div>
-                  <div class="isi-pengaduan">
-                    <span class="info-label">📝 Isi Pengaduan:</span>
-                    <p class="isi-text">${item.isi_pengaduan}</p>
+                  <div class="content-section">
+                    <h4>Isi Pengaduan:</h4>
+                    <p>${item.isi_pengaduan}</p>
                   </div>
                   ${item.harapan ? `
-                    <div class="harapan">
-                      <span class="info-label">🎯 Harapan:</span>
-                      <p class="harapan-text">${item.harapan}</p>
+                    <div class="content-section">
+                      <h4>Harapan:</h4>
+                      <p>${item.harapan}</p>
                     </div>
                   ` : ''}
                 </div>
-                <div class="btn-status">
-                  <button class="btn-diproses" onclick="ubahStatus(${item.id}, 'Diproses')" ${item.status === 'Diproses' ? 'disabled' : ''}>🔄 Proses</button>
-                  <button class="btn-selesai" onclick="ubahStatus(${item.id}, 'Selesai')" ${item.status === 'Selesai' ? 'disabled' : ''}>✅ Selesai</button>
+                <div class="card-actions">
+                  <button class="btn-action btn-process" onclick="ubahStatus(${item.id}, 'Diproses')" ${item.status === 'Diproses' ? 'disabled' : ''}>
+                    ${item.status === 'Diproses' ? 'Sedang Diproses' : 'Proses'}
+                  </button>
+                  <button class="btn-action btn-complete" onclick="ubahStatus(${item.id}, 'Selesai')" ${item.status === 'Selesai' ? 'disabled' : ''}>
+                    ${item.status === 'Selesai' ? 'Sudah Selesai' : 'Selesai'}
+                  </button>
                 </div>
               `;
               list.appendChild(card);
@@ -172,6 +179,64 @@
         console.error('Error:', error);
         list.innerHTML = '<div class="empty-state"><p>❌ Terjadi kesalahan saat memuat data.</p></div>';
       });
+    }
+
+    // Export to Excel
+    function exportToExcel() {
+      if (pengaduanData.length === 0) {
+        alert("⚠️ Tidak ada data untuk diexport!");
+        return;
+      }
+
+      // Prepare data for Excel
+      const excelData = pengaduanData.map((item, index) => ({
+        'No': index + 1,
+        'Tanggal': new Date(item.tanggal).toLocaleDateString('id-ID'),
+        'Nama': item.nama,
+        'NIK': item.nik,
+        'Telepon': item.telepon,
+        'Email': item.email || 'Tidak diisi',
+        'Alamat': item.alamat,
+        'Jenis Pengaduan': item.jenis_pengaduan,
+        'Judul Pengaduan': item.judul_pengaduan,
+        'Isi Pengaduan': item.isi_pengaduan,
+        'Harapan': item.harapan || 'Tidak diisi',
+        'Status': item.status || 'Menunggu'
+      }));
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(excelData);
+
+      // Set column widths
+      const colWidths = [
+        { wch: 5 },  // No
+        { wch: 12 }, // Tanggal
+        { wch: 20 }, // Nama
+        { wch: 18 }, // NIK
+        { wch: 15 }, // Telepon
+        { wch: 25 }, // Email
+        { wch: 30 }, // Alamat
+        { wch: 20 }, // Jenis Pengaduan
+        { wch: 25 }, // Judul Pengaduan
+        { wch: 40 }, // Isi Pengaduan
+        { wch: 30 }, // Harapan
+        { wch: 12 }  // Status
+      ];
+      ws['!cols'] = colWidths;
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, "Data Pengaduan");
+
+      // Generate filename with current date
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
+      const filename = `Pengaduan_Desa_Banyusri_${dateStr}.xlsx`;
+
+      // Save file
+      XLSX.writeFile(wb, filename);
+      
+      alert("✅ Data berhasil diexport ke file Excel!");
     }
 
     // Initialize
@@ -206,6 +271,7 @@
           statusElement.innerText = status;
           statusElement.className = `status ${getStatusClass(status)}`;
           alert("✅ Status berhasil diperbarui menjadi: " + status);
+          loadPengaduan(); // Reload data to update button states
         } else {
           alert("❌ Gagal memperbarui status");
         }
