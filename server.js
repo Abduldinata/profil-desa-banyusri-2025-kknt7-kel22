@@ -13,8 +13,12 @@ const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const PORT = process.env.PORT || 8080;
 
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = process.env.JWT_SECRET || 'rahasiaDesaBanyusri';
+// Gunakan crypto untuk generate secret yang aman
+const crypto = require('crypto');
+const jwtSecret = crypto.randomBytes(64).toString('hex');
+console.log(jwtSecret); // Copy ini ke environment variable
+
+
 
 // Koneksi PostgreSQL
 const pool = new Pool({
