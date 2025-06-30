@@ -11,14 +11,25 @@
 <body>
   <div class="admin-container">
     <!-- Header -->
+<!-- ...existing code... -->
     <div class="admin-header">
+      <div class="logo-section">
+        <div class="logo">
+          <img src="img/logo.png" style="height:48px;width:auto;">
+        </div>
+        <div class="header-text">
+          <h1>DESA BANYUSRI</h1>
+          <p>Kecamatan Wonosegoro, Kabupaten Boyolali</p>
+        </div>
+      </div>
       <div class="header-left">
-        <h1>📋 Dashboard Admin</h1>
+        <h1>📋 Dashboard Pengaduan Admin</h1>
         <p class="admin-subtitle">Desa Banyusri</p>
         <p class="welcome-text">Selamat datang, <span id="admin-name">Admin</span>!</p>
       </div>
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
+<!-- ...existing code... -->
 
     <!-- Statistics Cards -->
     <div class="stats-container">
@@ -62,8 +73,85 @@
   </div>
 
   <script>
-    const token = localStorage.getItem("admin_token");
-    if (!token) window.location.href = "login.html";
+    // 🔒 KEAMANAN DIPERBAIKI: Validasi token yang lebih ketat
+    let token = localStorage.getItem("admin_token");
+    
+    // Fungsi untuk validasi dan pembersihan token
+    function validateAndCleanToken() {
+      token = localStorage.getItem("admin_token");
+      
+      if (!token) {
+        console.log("🔒 Token tidak ditemukan, redirect ke login");
+        redirectToLogin();
+        return false;
+      }
+      
+      // Cek apakah token sudah expired (decode JWT secara sederhana)
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+        
+        if (payload.exp && payload.exp < currentTime) {
+          console.log("🔒 Token sudah expired, redirect ke login");
+          localStorage.removeItem("admin_token");
+          redirectToLogin();
+          return false;
+        }
+      } catch (e) {
+        console.log("🔒 Token tidak valid (format salah), redirect ke login");
+        localStorage.removeItem("admin_token");
+        redirectToLogin();
+        return false;
+      }
+      
+      return true;
+    }
+
+    // Fungsi redirect ke login
+    function redirectToLogin() {
+      alert("🔒 Sesi login telah berakhir atau tidak valid. Silakan login kembali.");
+      window.location.href = "login.html";
+    }
+
+    // 🔒 KEAMANAN: Validasi token saat halaman dimuat
+    if (!validateAndCleanToken()) {
+      // Jika token tidak valid, halaman akan redirect dan tidak melanjutkan eksekusi
+    }
+
+    // 🔒 KEAMANAN: Fungsi untuk melakukan fetch dengan auto-logout jika unauthorized
+    async function secureApiCall(url, options = {}) {
+      // Validasi token sebelum setiap API call
+      if (!validateAndCleanToken()) {
+        return null;
+      }
+
+      // Tambahkan authorization header
+      const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        ...options.headers
+      };
+
+      try {
+        const response = await fetch(url, {
+          ...options,
+          headers
+        });
+
+        // 🔒 KEAMANAN: Cek status unauthorized
+        if (response.status === 401 || response.status === 403) {
+          console.log("🔒 API mengembalikan unauthorized, membersihkan token");
+          localStorage.removeItem("admin_token");
+          redirectToLogin();
+          return null;
+        }
+
+        return response;
+      } catch (error) {
+        console.error('🔒 Error dalam API call:', error);
+        throw error;
+      }
+    }
 
     let pengaduanData = []; // Store data for export
 
@@ -112,18 +200,16 @@
       console.log("📊 Stats updated:", stats);
     }
 
-    // Load statistics dengan debug
-    function loadStats() {
+    // Load statistics dengan keamanan
+    async function loadStats() {
       console.log("🔄 Loading stats from API...");
       
-      fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/stats", {
-        headers: { Authorization: "Bearer " + token }
-      })
-      .then(res => {
-        console.log("📡 Stats API Response status:", res.status);
-        return res.json();
-      })
-      .then(data => {
+      try {
+        const response = await secureApiCall("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/stats");
+        
+        if (!response) return; // Token invalid, sudah redirect
+        
+        const data = await response.json();
         console.log("📊 Stats API Response:", data);
         
         if (data.success && data.data) {
@@ -135,8 +221,7 @@
             updateStatsDisplay(manualStats);
           }
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('❌ Error loading stats:', error);
         // Fallback ke perhitungan manual jika API gagal
         if (pengaduanData.length > 0) {
@@ -144,27 +229,21 @@
           const manualStats = calculateStats(pengaduanData);
           updateStatsDisplay(manualStats);
         }
-      });
+      }
     }
 
-    // Load pengaduan data
-    function loadPengaduan() {
+    // Load pengaduan data dengan keamanan
+    async function loadPengaduan() {
       const list = document.getElementById("pengaduan-list");
       list.innerHTML = '<div class="loading-state"><p>⏳ Memuat data pengaduan...</p></div>';
 
-      fetch("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan", {
-        headers: { Authorization: "Bearer " + token }
-      })
-      .then(res => {
-        if (res.status === 401 || res.status === 403) {
-          alert("Sesi login telah berakhir. Silakan login kembali.");
-          localStorage.removeItem("admin_token");
-          window.location.href = "login.html";
-          return;
-        }
-        return res.json();
-      })
-      .then(data => {
+      try {
+        const response = await secureApiCall("https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan");
+        
+        if (!response) return; // Token invalid, sudah redirect
+        
+        const data = await response.json();
+        
         if (data && data.success) {
           pengaduanData = data.data; // Store for export
           console.log("📋 Pengaduan data loaded:", pengaduanData.length, "items");
@@ -245,11 +324,10 @@
         } else {
           list.innerHTML = '<div class="empty-state"><p>❌ Gagal memuat data pengaduan.</p></div>';
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error:', error);
         list.innerHTML = '<div class="empty-state"><p>❌ Terjadi kesalahan saat memuat data.</p></div>';
-      });
+      }
     }
 
     // Export to Excel
@@ -310,8 +388,10 @@
       alert("✅ Data berhasil diexport ke file Excel!");
     }
 
-    // Initialize
-    loadPengaduan();
+    // Initialize dengan validasi keamanan
+    if (validateAndCleanToken()) {
+      loadPengaduan();
+    }
 
     function getStatusClass(status) {
       switch ((status || "Menunggu").toLowerCase()) {
@@ -321,22 +401,26 @@
       }
     }
 
-    function ubahStatus(id, status) {
+    // Ubah status dengan keamanan
+    async function ubahStatus(id, status) {
       const button = event.target;
       const originalText = button.innerHTML;
       button.innerHTML = "⏳ Memproses...";
       button.disabled = true;
 
-      fetch(`https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan/${id}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token
-        },
-        body: JSON.stringify({ status })
-      })
-      .then(res => res.json())
-      .then(data => {
+      try {
+        const response = await secureApiCall(
+          `https://profil-desa-banyusri-2025-kknt7-kel22-production.up.railway.app/admin/pengaduan/${id}/status`,
+          {
+            method: "PUT",
+            body: JSON.stringify({ status })
+          }
+        );
+
+        if (!response) return; // Token invalid, sudah redirect
+
+        const data = await response.json();
+        
         if (data.success) {
           const statusElement = document.getElementById("status-" + id);
           statusElement.innerText = status;
@@ -346,15 +430,13 @@
         } else {
           alert("❌ Gagal memperbarui status");
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error:', error);
         alert("❌ Terjadi kesalahan saat memperbarui status");
-      })
-      .finally(() => {
+      } finally {
         button.innerHTML = originalText;
         button.disabled = false;
-      });
+      }
     }
 
     function logout() {
@@ -363,6 +445,36 @@
         window.location.href = "login.html";
       }
     }
+
+    // 🔒 KEAMANAN: Validasi token secara berkala (setiap 30 detik)
+    setInterval(() => {
+      if (!validateAndCleanToken()) {
+        console.log("🔒 Token tidak valid terdeteksi pada interval check");
+        // Halaman akan redirect otomatis
+      }
+    }, 30000); // 30 detik
+
+    // 🔒 KEAMANAN: Cek visibility halaman (jika user kembali ke tab)
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        // Halaman menjadi visible, validasi token
+        if (!validateAndCleanToken()) {
+          console.log("🔒 Token tidak valid saat halaman menjadi visible");
+          // Halaman akan redirect otomatis
+        }
+      }
+    });
+
+    // 🔒 KEAMANAN: Prevent back button after logout
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted || window.performance && window.performance.navigation.type === 2) {
+        // Halaman dimuat dari cache, validasi ulang token
+        if (!validateAndCleanToken()) {
+          console.log("🔒 Token tidak valid saat halaman dimuat dari cache");
+          // Halaman akan redirect otomatis
+        }
+      }
+    });
   </script>
 </body>
 </html>
