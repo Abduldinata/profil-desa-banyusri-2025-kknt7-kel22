@@ -204,6 +204,99 @@ nav {
     padding: 2rem;
 }
 
+/* Hero Section - Gaya Seragam */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+    margin: 2rem 0;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+/* Tombol */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #1f5582);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #7f8c8d, #6c7b7d);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+
 .content {
     display: flex;
     flex-direction: column;
@@ -299,12 +392,67 @@ nav {
 /* =============================================================================
    Profile Grid Layout
    ============================================================================= */
+.profile-content {
+    margin: 2rem 0;
+}
+
 .profile-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin: 1.5rem 0;
+    gap: 2rem;
 }
+
+.info-item.section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.info-item.section:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.info-item h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    background: linear-gradient(45deg, #3498db, #2ecc71);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    position: relative;
+}
+
+.info-item p, .info-item ul {
+    color: #444;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.info-item ul {
+    padding-left: 1.2rem;
+}
+
+.info-item ul li {
+    margin-bottom: 0.5rem;
+    list-style: none;
+    position: relative;
+}
+
+.info-item ul li::before {
+    content: "✔️";
+    position: absolute;
+    left: -1.2rem;
+}
+
 
 .info-item {
     background: rgba(248, 249, 250, 0.9);
@@ -791,20 +939,242 @@ footer::before {
     outline-offset: 2px;
 }
 
-/* Print styles */
-@media print {
-    .nav-container,
-    footer {
-        display: none;
+/* Fix untuk Section Sejarah dan Visi-Misi */
+
+/* Layout untuk memisahkan sejarah dan visi-misi secara vertikal */
+.profile-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Sejarah Section */
+#sejarah {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+#sejarah .section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #667eea;
+}
+
+#sejarah .section-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+#sejarah h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Timeline Styling */
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 0;
+    height: calc(100% - 40px);
+    width: 2px;
+    background: linear-gradient(to bottom, #667eea, #764ba2);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    padding-left: 80px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -50px;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: #667eea;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+    z-index: 2;
+}
+
+.timeline-content h4 {
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.timeline-content p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Visi-Misi Section */
+#visi-misi {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+#visi-misi .section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #667eea;
+}
+
+#visi-misi .section-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+#visi-misi h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.vision-mission-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.vision-box, .mission-box {
+    background: #f8f9ff;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid #e0e6ff;
+}
+
+.vm-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.vision-box h3, .mission-box h3 {
+    color: #333;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.vision-text {
+    color: #666;
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: center;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.mission-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mission-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.mission-icon {
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+.mission-text h4 {
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+}
+
+.mission-text p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-content {
+        padding: 15px;
     }
     
-    .profile-section {
-        box-shadow: none;
-        border: 1px solid #ddd;
-        break-inside: avoid;
+    #sejarah, #visi-misi {
+        padding: 20px;
     }
     
-    .village-image {
-        max-height: 200px;
+    .timeline-item {
+        padding-left: 60px;
+    }
+    
+    .timeline::before {
+        left: 20px;
+    }
+    
+    .timeline-dot {
+        left: -40px;
+    }
+    
+    #sejarah h2, #visi-misi h2 {
+        font-size: 24px;
+    }
+    
+    .vision-box h3, .mission-box h3 {
+        font-size: 20px;
+    }
+    
+    .vision-text {
+        font-size: 16px;
     }
 }

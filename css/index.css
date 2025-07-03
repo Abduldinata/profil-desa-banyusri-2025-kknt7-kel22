@@ -573,26 +573,3 @@ footer::before {
     outline: 2px solid #3498db;
     outline-offset: 2px;
 }
-
-/* Print styles */
-@media print {
-    .nav-container,
-    footer,
-    .admin-access {
-        display: none;
-    }
-    
-    .section,
-    .card,
-    .stats {
-        box-shadow: none;
-        border: 1px solid #ddd;
-        break-inside: avoid;
-    }
-    
-    body::before,
-    .hero::before,
-    .section::before {
-        display: none;
-    }
-}

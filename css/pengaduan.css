@@ -273,19 +273,17 @@ nav {
 /* =============================================================================
    Content Sections - Enhanced
    ============================================================================= */
-.section,
-.content ,
-.card {
-    margin: 2rem 0;
-    padding: 2rem;
+.section {
+    margin: 3rem 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     border-radius: 20px;
-    background: #fff 
-;
-    backdrop-filter: none 
-;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
 }
-
-
 
 .section::before {
     content: '';
@@ -743,6 +741,8 @@ footer::before {
 /* =============================================================================
    Admin Access Styles - Enhanced to match index.css
    ============================================================================= */
+
+/* Admin Access Styles - Enhanced to match profil.css */
 .admin-access {
     display: flex;
     align-items: center;
@@ -754,15 +754,14 @@ footer::before {
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     background: rgba(255, 255, 255, 0.15);
-    border: 1px solid #e0e0e0;
-
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 25px;
     color: white;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    backdrop-filter: none;
+    backdrop-filter: blur(10px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -822,313 +821,3 @@ footer::before {
 .section:nth-child(even) {
     animation: slideInLeft 0.6s ease-out;
 }
-/* =============================================================================
-   Responsive Design - Enhanced Mobile First
-   ============================================================================= */
-
-/* Large Desktop */
-@media (min-width: 1200px) {
-    .cards-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    
-    .complaint-types {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Animation Effects - Added from profil.css */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-/* Small Mobile Styles */
-@media (max-width: 480px) {
-    .logo {
-        font-size: 2rem;
-    }
-
-    .header-text h1 {
-        font-size: 1.2rem;
-    }
-
-    .header-text p {
-        font-size: 0.8rem;
-    }
-
-    .hero-content h2 {
-        font-size: 1.5rem;
-    }
-
-    .hero-content p {
-        font-size: 1rem;
-    }
-
-    .section h2 {
-        font-size: 1.5rem;
-    }
-
-    .card {
-        padding: 1.5rem;
-    }
-
-    .type-item {
-        padding: 1rem;
-    }
-
-    .form-container {
-        padding: 1rem;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        padding: 0.6rem;
-    }
-
-    .btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-}
-
-/* Extra Small Mobile Styles */
-@media (max-width: 360px) {
-    .page-content {
-        padding: 0 0.75rem;
-    }
-
-    .header-content {
-        padding: 0 0.75rem;
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-
-    .nav-container {
-        padding: 0 0.75rem;
-        justify-content: center;
-    }
-
-    .nav-item {
-        font-size: 0.9rem;
-        padding: 0.75rem 0;
-    }
-
-    .hero {
-        padding: 1.5rem 0.75rem;
-        margin: 1rem 0;
-    }
-
-    .section {
-        padding: 1rem;
-        margin: 1.5rem 0;
-    }
-
-    .card-icon {
-        font-size: 2.5rem;
-    }
-
-    .step-number {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-}
-
-/* =============================================================================
-   Print Styles
-   ============================================================================= */
-@media print {
-    * {
-        background: white 
-;
-        color: black 
-;
-        box-shadow: none 
-;
-        text-shadow: none 
-;
-    }
-
-    body {
-        background: white 
-;
-        font-size: 12pt;
-        line-height: 1.4;
-    }
-
-    header,
-    nav,
-    footer,
-    .admin-access,
-    .hero-buttons,
-    .button-group {
-        display: none 
-;
-    }
-
-    .section {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        margin: 1rem 0;
-        padding: 1rem;
-        border: 1px solid #ddd;
-    }
-
-    .cards-grid,
-    .complaint-types,
-    .process-steps {
-        display: block;
-    }
-
-    .card,
-    .type-item,
-    .step-item {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        margin-bottom: 1rem;
-        border: 1px solid #ddd;
-        padding: 1rem;
-    }
-
-    .form-container {
-        border: 2px solid #333;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        border: 1px solid #333;
-        background: white 
-;
-    }
-}
-
-/* =============================================================================
-   Accessibility Enhancements
-   ============================================================================= */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms 
-;
-        animation-iteration-count: 1 
-;
-        transition-duration: 0.01ms 
-;
-        scroll-behavior: auto 
-;
-    }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .btn {
-        border: 2px solid currentColor;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        border: 2px solid #333;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-        border-color: #000;
-        box-shadow: 0 0 0 3px #000;
-    }
-}
-
-/* Dark mode preference support */
-@media (prefers-color-scheme: dark) {
-  .card {
-    background: #ffffff 
-;
-    color: #2c3e50 
-;
-    border-color: #e0e0e0 
-;
-    background: var(--bg-primary);
-    color: var(--text-primary); 
-    }
-
-    .section,
-    .card,
-    .type-item,
-    .step-item,
-    .form-container {
-        background: var(--bg-secondary);
-        border-color: var(--border-color);
-        color: var(--text-primary);
-    }
-
-    .section h2,
-    .card h3,
-    .step-content h3 {
-        color: var(--text-primary);
-    }
-
-    .card p,
-    .step-content p {
-        color: var(--text-secondary);
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        background: var(--bg-secondary);
-        border-color: var(--border-color);
-        color: var(--text-primary);
-    }
-
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-        color: var(--text-secondary);
-    }
-}
-
-/* =============================================================================
-   Performance Optimizations
-   ============================================================================= */
-.section,
-.card,
-.type-item,
-.step-item {
-    contain: layout style paint;
-    will-change: transform;
-}
-
-.btn {
-    contain: layout style;
-    will-change: transform, background-color;
-}
-
-/* Prefetch hover states */
-.nav-item::before,
-.card::before,
-.type-item::before,
-.step-item::before {
-    will-change: transform;
-}
-
