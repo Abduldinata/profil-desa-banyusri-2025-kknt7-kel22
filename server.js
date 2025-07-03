@@ -17,7 +17,6 @@ const PORT = process.env.PORT || 8080;
 // Gunakan crypto untuk generate secret yang aman
 const crypto = require('crypto');
 const jwtSecret = crypto.randomBytes(64).toString('hex');
-console.log(jwtSecret); // Copy ini ke environment variable
 const SECRET_KEY = process.env.JWT_SECRET;
 if (!SECRET_KEY) {
   console.error('❌ JWT_SECRET required!');
