@@ -1178,3 +1178,114 @@ footer::before {
         font-size: 16px;
     }
 }
+@media (max-width: 768px) {
+    .header-content,
+    .nav-container,
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .logo {
+        font-size: 2rem;
+    }
+
+    .header-text h1 {
+        font-size: 1.5rem;
+    }
+
+    .nav-container {
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .nav-item {
+        padding: 0.75rem 0;
+        font-size: 0.9rem;
+    }
+
+    .hero {
+        padding: 2rem 1rem;
+    }
+
+    .hero h2 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .content {
+        gap: 2rem;
+    }
+
+    .profile-grid,
+    .officials-grid,
+    .kegiatan-grid,
+    .facilities-grid,
+    .maps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .admin-access {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-text h1 {
+        font-size: 1.2rem;
+    }
+
+    .hero h2 {
+        font-size: 1.6rem;
+    }
+
+    .hero p {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        font-size: 0.85rem;
+    }
+
+    .profile-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .official-card h4,
+    .kegiatan-card h4 {
+        font-size: 1rem;
+    }
+
+    .kegiatan-card p {
+        font-size: 0.8rem;
+    }
+
+    .maps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .map-box iframe {
+        height: 200px;
+    }
+}
