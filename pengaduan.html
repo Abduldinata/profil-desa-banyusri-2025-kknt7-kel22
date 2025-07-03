@@ -81,8 +81,9 @@
                 </div>
             </section>
 
+            
             <!-- Jenis Pengaduan -->
-            <section class="section">
+            <section class="section" id="jenis-pengaduan">
                 <h2>Jenis Pengaduan</h2>
                 <div class="complaint-types">
                     <div class="type-item">🏗️ Infrastruktur Desa</div>
@@ -95,7 +96,7 @@
             </section>
 
             <!-- Alur Pengaduan -->
-            <section class="section">
+            <section class="section" id="alur-pengaduan">
                 <h2>Alur Pengaduan</h2>
                 <div class="process-steps">
                     <div class="step-item">
@@ -131,14 +132,7 @@
 
             <!-- Form Pengaduan -->
             <section class="section" id="form-pengaduan">
-                <h2>Form Pengaduan Online</h2>
-                <div class="form-container">
-                    <div class="form-header">
-                        <h3>📝 Formulir Pengaduan Masyarakat</h3>
-                        <p>Silakan isi form di bawah ini dengan lengkap dan jelas</p>
-                    </div>
-
-                    <div id="alert-container"></div>
+            <h2>Form Pengaduan Online</h2>
 
         <form id="complaint-form" class="complaint-form">
             <!-- Nama, NIK, Telepon tetap seperti biasa -->
@@ -175,7 +169,7 @@
         <input type="text" id="alamat" name="alamat" required placeholder="Masukkan alamat lengkap Anda">
         </div>
 
-            <div class="form-group">
+        <div class="form-group">
             <label for="jenis_pengaduan">Jenis Pengaduan *</label>
             <select id="jenis_pengaduan" name="jenis_pengaduan" required>
             <option value="">-- Pilih Jenis Pengaduan --</option>
@@ -192,7 +186,7 @@
             <option value="kebudayaan">🎭 Kebudayaan & Kesenian</option>
             <option value="lainnya">📋 Lainnya</option>
             </select>
-            </div>
+        </div>
 
         <div class="form-group">
         <label for="judul_pengaduan">Judul *</label>
@@ -214,19 +208,10 @@
         <button type="reset" class="btn btn-secondary">🔄 Reset</button>
         </div>
         </form>
-        </div>
-
-                    <!-- Loading Spinner -->
-
-        <div id="alert-container"></div>
-                    <div id="loading" class="loading">
-                        <div class="spinner"></div>
-                        <p>Memproses pengaduan Anda...</p>
-                    </div>
-                </div>
+        </section>
 
             <!-- Kontak Langsung -->
-            <section class="section">
+            <section class="section " id="kontak-langsung">
                 <h2>Kontak Langsung</h2>
                 <div class="cards-grid">
                     <div class="card">
@@ -246,12 +231,18 @@
                         <h3>Email Resmi</h3>
                         <p><strong>pengaduan@banyusri.desa.id</strong></p>
                         <p>Respon maksimal 1x24 jam</p>
+                        </div>
                     </div>
                 </div>
             </section>
         </div>
-    </div>
 
+        <!-- Alert Container -->
+        <div id="alert-container"></div>
+                <div id="loading" class="loading" style="display:none;">
+                    <div class="spinner"></div>
+                    <p>Memproses pengaduan Anda...</p>
+                </div>
     <!-- Footer -->
     <footer>
         <div class="footer-content">
