@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="css/pengaduan.css">
 </head>
 <body>
+        <!-- Loading di luar alert -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Memproses pengaduan Anda...</p>
+        </div>
+
+        <!-- Alert container -->
+        <div id="alert-container"></div>
+        
     <!-- Header -->
     <header>
         <div class="header-content">
@@ -133,15 +142,6 @@
             <!-- Form Pengaduan -->
             <section class="section" id="form-pengaduan">
             <h2>Form Pengaduan Online</h2>
-
-              <!-- Loading di luar alert -->
-        <div id="loading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>Memproses pengaduan Anda...</p>
-        </div>
-
-        <!-- Alert container -->
-        <div id="alert-container"></div>
 
         <form id="complaint-form" class="complaint-form">
             <!-- Nama, NIK, Telepon tetap seperti biasa -->
