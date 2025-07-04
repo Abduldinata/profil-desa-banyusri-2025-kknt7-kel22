@@ -615,20 +615,25 @@ nav {
 /* =============================================================================
    Alert Styles - Enhanced
    ============================================================================= */
-#alert-container {
-    margin-bottom: 1rem;
-}
+        #alert-container {
+            margin: 1rem 0;
+            z-index: 1000;
+            position: relative;
+        }
 
-
-        /* Alert Styles */
         .alert {
             padding: 15px;
             border-radius: 6px;
-            margin-bottom: 20px;
-            font-weight: 500;
+            font-weight: bold;
+            margin: 20px 0;
+            font-size: 16px;
+            display: block;
+            z-index: 9999;
+        }
+        .alert {
             opacity: 0;
             transform: translateY(-20px);
-            transition: all 0.3s;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .alert.show {

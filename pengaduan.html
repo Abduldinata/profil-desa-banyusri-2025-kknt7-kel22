@@ -134,12 +134,15 @@
             <section class="section" id="form-pengaduan">
             <h2>Form Pengaduan Online</h2>
 
-                <!-- Alert Container -->
-        <div id="alert-container"></div>
-            <div id="loading" class="loading" style="display:none;">
+              <!-- Loading di luar alert -->
+        <div id="loading" class="loading" style="display: none;">
             <div class="spinner"></div>
             <p>Memproses pengaduan Anda...</p>
         </div>
+
+        <!-- Alert container -->
+        <div id="alert-container"></div>
+
         <form id="complaint-form" class="complaint-form">
             <!-- Nama, NIK, Telepon tetap seperti biasa -->
             <div class="form-group">
@@ -262,9 +265,14 @@
         let otpDikirim = false;
 
         // Utility function untuk menampilkan loading
-        function showLoading(text = 'Memproses...') {
-            document.getElementById('loading-text').textContent = text;
-            document.getElementById('loading').style.display = 'flex';
+            function showLoading(text = 'Memproses...') {
+            const loadingElement = document.getElementById('loading');
+            const loadingText = loadingElement.querySelector('p');  // ✅ BENAR
+            
+            if (loadingText) {
+                loadingText.textContent = text;
+            }
+            loadingElement.style.display = 'flex';
         }
 
         // Utility function untuk menyembunyikan loading
@@ -274,6 +282,7 @@
 
         // Utility function untuk menampilkan alert
         function showAlert(message, type = 'info') {
+            console.log('>> showAlert dipanggil:', message, type);
             const alertContainer = document.getElementById('alert-container');
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
@@ -310,9 +319,12 @@
 
         // Event listener untuk kirim OTP
         document.getElementById('btn-kirim-otp').addEventListener('click', async function() {
+            console.log('Tombol kirim OTP diklik'); // ✅ Tambahkan ini
+            
             const email = document.getElementById('email').value.trim();
             
             if (!email) {
+                console.log('Email kosong'); // ✅ Tambahkan ini
                 showAlert('❌ Mohon masukkan email terlebih dahulu', 'error');
                 return;
             }
