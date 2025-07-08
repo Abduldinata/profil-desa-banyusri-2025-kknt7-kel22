@@ -12,7 +12,6 @@
             <div class="spinner"></div>
             <p>Memproses pengaduan Anda...</p>
         </div>
-
         <!-- Alert container -->
         <div id="alert-container"></div>
         
@@ -28,13 +27,14 @@
                     <p>Kecamatan Wonosegoro, Kabupaten Boyolali</p>
                 </div>
             </div>
-<!-- Tambahkan di dalam header-content yang sudah ada -->
-<div class="admin-access">
-    <a href="login.html" class="admin-link" title="Login Admin">
-        <span class="admin-icon">👤</span>
-        <span class="admin-text">Admin</span>
-    </a>
-</div>
+
+            <!-- Tambahkan di dalam header-content yang sudah ada -->
+            <div class="admin-access">
+                <a href="login.html" class="admin-link" title="Login Admin">
+                    <span class="admin-icon">👤</span>
+                    <span class="admin-text">Admin</span>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -48,215 +48,248 @@
         </div>
     </nav>
 
-    <!-- Pengaduan Page Content -->
-    <div class="page-content active">
+    <!-- Main Content -->
+    <main class="page-content active">
         <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-content">
-                <h2>📢 Layanan Pengaduan Online</h2>
-                <p>Sampaikan keluhan, saran, dan aspirasi Anda untuk kemajuan Desa Banyusri</p>
-                <div class="hero-buttons">
-                    <a href="#form-pengaduan" class="btn btn-primary">📝 Buat Pengaduan</a>
-                    <a href="#info-layanan" class="btn btn-secondary">ℹ️ Info Layanan</a>
+            <div class="container">
+                <div class="hero-content">
+                    <h2>📢 Layanan Pengaduan Online</h2>
+                    <p>Sampaikan keluhan, saran, dan aspirasi Anda untuk kemajuan Desa Banyusri</p>
+                    <div class="hero-buttons">
+                        <a href="#form-pengaduan" class="btn btn-primary">📝 Buat Pengaduan</a>
+                        <a href="#info-layanan" class="btn btn-secondary">ℹ️ Info Layanan</a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <div class="content">
-            <!-- Informasi Layanan -->
-            <section class="section" id="info-layanan">
-                <h2>Informasi Layanan Pengaduan</h2>
-                <div class="cards-grid">
-                    <div class="card">
-                        <div class="card-icon">📝</div>
-                        <h3>Mudah Digunakan</h3>
-                        <p>Form pengaduan yang sederhana dan mudah dipahami oleh semua kalangan masyarakat.</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon">⏰</div>
-                        <h3>Respons Cepat</h3>
-                        <p>Pengaduan akan ditanggapi dalam waktu maksimal 1x24 jam kerja.</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon">🔒</div>
-                        <h3>Terjamin Privasi</h3>
-                        <p>Data pribadi Anda akan dijaga kerahasiaannya sesuai ketentuan yang berlaku.</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon">📧</div>
-                        <h3>Langsung ke Email</h3>
-                        <p>Pengaduan langsung dikirim ke email resmi balai desa untuk penanganan cepat.</p>
-                    </div>
+        <!-- Informasi Layanan -->
+        <div class="container" id="info-layanan" style=" background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" >
+            <h3>Informasi Layanan Pengaduan</h2>
+            <div class="profile-grid">
+                <div class="info-item">
+                    <div class="card-icon">📝</div>
+                    <h3>Mudah Digunakan</h3>
+                    <p>Form pengaduan yang sederhana dan mudah dipahami oleh semua kalangan masyarakat.</p>
                 </div>
-            </section>
+                <div class="info-item">
+                    <div class="card-icon">⏰</div>
+                    <h3>Respons Cepat</h3>
+                    <p>Pengaduan akan ditanggapi dalam waktu maksimal 1x24 jam kerja.</p>
+                </div>
+                <div class="info-item">
+                    <div class="card-icon">🔒</div>
+                    <h3>Terjamin Privasi</h3>
+                    <p>Data pribadi Anda akan dijaga kerahasiaannya sesuai ketentuan yang berlaku.</p>
+                </div>
+                <div class="info-item">
+                    <div class="card-icon">📧</div>
+                    <h3>Langsung ke Email</h3>
+                    <p>Pengaduan langsung dikirim ke email resmi balai desa untuk penanganan cepat.</p>
+                </div>
+            </div>
+        </div>
 
-            
-            <!-- Jenis Pengaduan -->
-            <section class="section" id="jenis-pengaduan">
-                <h2>Jenis Pengaduan</h2>
-                <div class="complaint-types">
+        <!-- Jenis Pengaduan -->
+        <div class="container" id="jenis-pengaduan" style=" background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;">
+            <h3>Jenis Pengaduan</h2>
+            <div class="profile-grid">
+                <div class="info-item">
                     <div class="type-item">🏗️ Infrastruktur Desa</div>
+                </div>
+                <div class="info-item">
                     <div class="type-item">🏛️ Pelayanan Publik</div>
+                </div>
+                <div class="info-item">
                     <div class="type-item">🌱 Lingkungan Hidup</div>
+                </div>
+                <div class="info-item">
                     <div class="type-item">🛡️ Keamanan & Ketertiban</div>
+                </div>
+                <div class="info-item">
                     <div class="type-item">📄 Administrasi Kependudukan</div>
+                </div>
+                <div class="info-item">
                     <div class="type-item">📋 Lainnya</div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Alur Pengaduan -->
-            <section class="section" id="alur-pengaduan">
-                <h2>Alur Pengaduan</h2>
-                <div class="process-steps">
-                    <div class="step-item">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h3>Isi Form Pengaduan</h3>
-                            <p>Lengkapi form pengaduan dengan data yang akurat dan jelas</p>
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h3>Kirim Pengaduan</h3>
-                            <p>Pengaduan akan dikirim langsung ke email resmi balai desa</p>
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h3>Verifikasi Data</h3>
-                            <p>Petugas akan memverifikasi dan menindaklanjuti pengaduan Anda</p>
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h3>Tindak Lanjut</h3>
-                            <p>Anda akan dihubungi untuk update perkembangan pengaduan</p>
-                        </div>
+        <!-- Alur Pengaduan -->
+        <div class="container" id="alur-pengaduan" style=" background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 25px;">
+            <h3>Alur Pengaduan</h2>
+            <div class="profile-grid">
+                <div class="info-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Isi Form Pengaduan</h3>
+                        <p>Lengkapi form pengaduan dengan data yang akurat dan jelas</p>
                     </div>
                 </div>
-            </section>
-
-            <!-- Form Pengaduan -->
-            <section class="section" id="form-pengaduan">
-            <h2>Form Pengaduan Online</h2>
-
-        <form id="complaint-form" class="complaint-form">
-            <!-- Nama, NIK, Telepon tetap seperti biasa -->
-            <div class="form-group">
-            <label for="nama">Nama Lengkap *</label>
-            <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap Anda">
-            </div>
-
-            <div class="form-group">
-            <label for="nik">NIK *</label>
-            <input type="text" id="nik" name="nik" required maxlength="16" placeholder="Masukkan NIK Anda">
-            </div>
-
-            <div class="form-group">
-            <label for="telepon">No. Telepon *</label>
-            <input type="tel" id="telepon" name="telepon" required placeholder="Masukkan nomor telepon Anda">
-            </div>
-
-        <!-- Tambahan Email + OTP -->
-        <div class="form-group">
-        <label for="email">Email *</label>
-        <input type="email" id="email" name="email" required placeholder="email@contoh.com">
-        <button type="button" id="btn-kirim-otp" class="btn btn-secondary" style="margin-top: 10px">🔐 Kirim Kode Verifikasi</button>
-        <div id="otp-section" style="display:none; margin-top: 10px;">
-            <label for="otp">Masukkan Kode OTP *</label>
-            <input type="text" id="otp" name="otp" placeholder="6 digit kode" maxlength="6" required>
-            <button type="button" id="btn-verifikasi-otp" class="btn btn-primary" style="margin-top: 10px">✅ Verifikasi OTP</button>
-        </div>
-        </div>
-
-        <!-- Alamat, Jenis Pengaduan, dll -->
-        <div class="form-group">
-        <label for="alamat">Alamat *</label>
-        <input type="text" id="alamat" name="alamat" required placeholder="Masukkan alamat lengkap Anda">
-        </div>
-
-        <div class="form-group">
-            <label for="jenis_pengaduan">Jenis Pengaduan *</label>
-            <select id="jenis_pengaduan" name="jenis_pengaduan" required>
-            <option value="">-- Pilih Jenis Pengaduan --</option>
-            <option value="infrastruktur">🏗️ Infrastruktur Desa</option>
-            <option value="pelayanan_publik">🏛️ Pelayanan Publik</option>
-            <option value="keamanan">🛡️ Keamanan & Ketertiban</option>
-            <option value="lingkungan">🌱 Lingkungan Hidup</option>
-            <option value="administrasi">📄 Administrasi Kependudukan</option>
-            <option value="sosial">🤝 Bantuan Sosial & Kesejahteraan</option>
-            <option value="ekonomi">💼 Ekonomi & UMKM</option>
-            <option value="pendidikan">🎓 Pendidikan & Sekolah</option>
-            <option value="kesehatan">🏥 Kesehatan & Posyandu</option>
-            <option value="agama">🕌 Kegiatan Keagamaan</option>
-            <option value="kebudayaan">🎭 Kebudayaan & Kesenian</option>
-            <option value="lainnya">📋 Lainnya</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-        <label for="judul_pengaduan">Judul *</label>
-        <input type="text" id="judul_pengaduan" name="judul_pengaduan" required placeholder="Masukkan judul pengaduan Anda">
-        </div>
-
-        <div class="form-group">
-        <label for="isi_pengaduan">Isi Pengaduan *</label>
-        <textarea id="isi_pengaduan" name="isi_pengaduan" required placeholder="Jelaskan pengaduan Anda secara rinci"></textarea>
-        </div>
-
-        <div class="form-group">
-        <label for="harapan">Harapan/Saran</label>
-        <textarea id="harapan" name="harapan" placeholder="Tuliskan harapan atau saran Anda"></textarea>
-        </div>
-
-        <div class="button-group">
-        <button type="submit" class="btn btn-primary">📤 Kirim Pengaduan</button>
-        <button type="reset" class="btn btn-secondary">🔄 Reset</button>
-        </div>
-        </form>
-        </section>
-
-            <!-- Kontak Langsung -->
-            <section class="section " id="kontak-langsung">
-                <h2>Kontak Langsung</h2>
-                <div class="cards-grid">
-                    <div class="card">
-                        <div class="card-icon">📞</div>
-                        <h3>Telepon Balai Desa</h3>
-                        <p><strong>(0276) 123456</strong></p>
-                        <p>Senin - Jumat: 08:00 - 15:00 WIB</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon">📱</div>
-                        <h3>WhatsApp</h3>
-                        <p><strong>0812-3456-7890</strong></p>
-                        <p>Untuk pengaduan darurat 24 jam</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon">📧</div>
-                        <h3>Email Resmi</h3>
-                        <p><strong>pengaduan@banyusri.desa.id</strong></p>
-                        <p>Respon maksimal 1x24 jam</p>
-                        </div>
+                <div class="info-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Kirim Pengaduan</h3>
+                        <p>Pengaduan akan dikirim langsung ke email resmi balai desa</p>
                     </div>
                 </div>
-            </section>
+                <div class="info-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Verifikasi Data</h3>
+                        <p>Petugas akan memverifikasi dan menindaklanjuti pengaduan Anda</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Tindak Lanjut</h3>
+                        <p>Anda akan dihubungi untuk update perkembangan pengaduan</p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Form Pengaduan -->
+        <div class="container" id="form-pengaduan" style=" background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 25px;">
+            <h3>Form Pengaduan Online</h2>
+
+            <form id="complaint-form" class="complaint-form">
+                <!-- Nama, NIK, Telepon tetap seperti biasa -->
+                <div class="form-group">
+                <label for="nama">Nama Lengkap *</label>
+                <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap Anda">
+                </div>
+
+                <div class="form-group">
+                <label for="nik">NIK *</label>
+                <input type="text" id="nik" name="nik" required maxlength="16" placeholder="Masukkan NIK Anda">
+                </div>
+
+                <div class="form-group">
+                <label for="telepon">No. Telepon *</label>
+                <input type="tel" id="telepon" name="telepon" required placeholder="Masukkan nomor telepon Anda">
+                </div>
+
+            <!-- Tambahan Email + OTP -->
+            <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required placeholder="email@contoh.com">
+            <button type="button" id="btn-kirim-otp" class="btn btn-secondary" style="margin-top: 10px">🔐 Kirim Kode Verifikasi</button>
+            <div id="otp-section" style="display:none; margin-top: 10px;">
+                <label for="otp">Masukkan Kode OTP *</label>
+                <input type="text" id="otp" name="otp" placeholder="6 digit kode" maxlength="6" required>
+                <button type="button" id="btn-verifikasi-otp" class="btn btn-primary" style="margin-top: 10px">✅ Verifikasi OTP</button>
+            </div>
+            </div>
+
+            <!-- Alamat, Jenis Pengaduan, dll -->
+            <div class="form-group">
+            <label for="alamat">Alamat *</label>
+            <input type="text" id="alamat" name="alamat" required placeholder="Masukkan alamat lengkap Anda">
+            </div>
+
+            <div class="form-group">
+                <label for="jenis_pengaduan">Jenis Pengaduan *</label>
+                <select id="jenis_pengaduan" name="jenis_pengaduan" required>
+                <option value="">-- Pilih Jenis Pengaduan --</option>
+                <option value="infrastruktur">🏗️ Infrastruktur Desa</option>
+                <option value="pelayanan_publik">🏛️ Pelayanan Publik</option>
+                <option value="keamanan">🛡️ Keamanan & Ketertiban</option>
+                <option value="lingkungan">🌱 Lingkungan Hidup</option>
+                <option value="administrasi">📄 Administrasi Kependudukan</option>
+                <option value="sosial">🤝 Bantuan Sosial & Kesejahteraan</option>
+                <option value="ekonomi">💼 Ekonomi & UMKM</option>
+                <option value="pendidikan">🎓 Pendidikan & Sekolah</option>
+                <option value="kesehatan">🏥 Kesehatan & Posyandu</option>
+                <option value="agama">🕌 Kegiatan Keagamaan</option>
+                <option value="kebudayaan">🎭 Kebudayaan & Kesenian</option>
+                <option value="lainnya">📋 Lainnya</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+            <label for="judul_pengaduan">Judul *</label>
+            <input type="text" id="judul_pengaduan" name="judul_pengaduan" required placeholder="Masukkan judul pengaduan Anda">
+            </div>
+
+            <div class="form-group">
+            <label for="isi_pengaduan">Isi Pengaduan *</label>
+            <textarea id="isi_pengaduan" name="isi_pengaduan" required placeholder="Jelaskan pengaduan Anda secara rinci"></textarea>
+            </div>
+
+            <div class="form-group">
+            <label for="harapan">Harapan/Saran</label>
+            <textarea id="harapan" name="harapan" placeholder="Tuliskan harapan atau saran Anda"></textarea>
+            </div>
+
+            <div class="button-group">
+            <button type="submit" class="btn btn-primary">📤 Kirim Pengaduan</button>
+            <button type="reset" class="btn btn-secondary">🔄 Reset</button>
+            </div>
+            </form>
+        </div>
+
+        <!-- Kontak Langsung -->
+        <div class="container" id="kontak-langsung" style=" background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 25px;">
+            <h3>Kontak Langsung</h2>
+            <div class="profile-grid">
+                <div class="info-item">
+                    <div class="card-icon">📞</div>
+                    <h3>Telepon Balai Desa</h3>
+                    <p><strong>(0276) 123456</strong></p>
+                    <p>Senin - Jumat: 08:00 - 15:00 WIB</p>
+                </div>
+                <div class="info-item">
+                    <div class="card-icon">📱</div>
+                    <h3>WhatsApp</h3>
+                    <p><strong>0812-3456-7890</strong></p>
+                    <p>Untuk pengaduan darurat 24 jam</p>
+                </div>
+                <div class="info-item">
+                    <div class="card-icon">📧</div>
+                    <h3>Email Resmi</h3>
+                    <p><strong>pengaduan@banyusri.desa.id</strong></p>
+                    <p>Respon maksimal 1x24 jam</p>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="index.html">Beranda</a>
-                <a href="profil.html">Profil Desa</a>
-                <a href="pengaduan.html">Pengaduan</a>
-                <a href="kontak.html">Kontak</a>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="index.html">Beranda</a>
+                    <a href="profil.html">Profil Desa</a>
+                    <a href="pengaduan.html">Pengaduan</a>
+                    <a href="kontak.html">Kontak</a>
+                </div>
+                <p>&copy; 2025 Desa Banyusri | KKN Tematik Periode 7 Kelompok 22 Universitas Duta Bangsa</p>
+                <p>Website Resmi Pemerintah Desa Banyusri</p>
             </div>
-            <p>&copy; 2025 Desa Banyusri | KKN Tematik Periode 7 Kelompok 22 Universitas Duta Bangsa</p>
-            <p>Website Resmi Pemerintah Desa Banyusri</p>
         </div>
     </footer>
 
@@ -573,6 +606,39 @@
             setTimeout(() => {
                 showAlert('ℹ️ Silakan isi form dengan data yang valid. Email akan diverifikasi terlebih dahulu.', 'info');
             }, 1000);
+        });
+
+        // Back to top button
+        const backToTopButton = document.createElement('button');
+        backToTopButton.innerHTML = '↑';
+        backToTopButton.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        `;
+        document.body.appendChild(backToTopButton);
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.opacity = '1';
+            } else {
+                backToTopButton.style.opacity = '0';
+            }
+        });
+        
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 </body>

@@ -19,13 +19,12 @@
                     <p>Kecamatan Wonosegoro, Kabupaten Boyolali</p>
                 </div>
             </div>
-<!-- Tambahkan di dalam header-content yang sudah ada -->
-<div class="admin-access">
-    <a href="login.html" class="admin-link" title="Login Admin">
-        <span class="admin-icon">👤</span>
-        <span class="admin-text">Admin</span>
-    </a>
-</div>
+            <div class="admin-access">
+                <a href="login.html" class="admin-link" title="Login Admin">
+                    <span class="admin-icon">👤</span>
+                    <span class="admin-text">Admin</span>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -39,23 +38,25 @@
         </div>
     </nav>
 
-    <!-- Beranda Page -->
-    <div class="page-content active">
+    <!-- Main Content -->
+    <main class="page-content active">
         <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-content">
-                <h2>Selamat Datang di Website Resmi Desa Banyusri</h2>
-                <p>Portal Informasi dan Layanan Masyarakat Desa Banyusri</p>
-                <div class="hero-buttons">
-                    <a href="pengaduan.html" class="btn btn-primary">📢 Laporkan Pengaduan</a>
-                    <a href="profil.html" class="btn btn-secondary">📋 Lihat Profil Desa</a>
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Selamat Datang di Website Resmi Desa Banyusri</h2>
+                    <p>Portal Informasi dan Layanan Masyarakat Desa Banyusri</p>
+                    <div class="hero-buttons">
+                        <a href="pengaduan.html" class="btn btn-primary">📢 Laporkan Pengaduan</a>
+                        <a href="profil.html" class="btn btn-secondary">📋 Lihat Profil Desa</a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Services Section -->
-        <div class="content">
-            <section class="section">
+        <section class="services">
+            <div class="container">
                 <h2>Layanan Desa Banyusri</h2>
                 <div class="cards-grid">
                     <div class="card">
@@ -77,47 +78,53 @@
                         <a href="kontak.html" class="btn btn-secondary">Hubungi Kami</a>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
 
-        <!-- Statistics -->
+        <!-- Statistics Section -->
         <section class="stats">
-            <h2>Data Desa Banyusri</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <h3>1,250</h3>
-                    <p>Jumlah Penduduk</p>
-                </div>
-                <div class="stat-item">
-                    <h3>8</h3>
-                    <p>Rukun Tetangga</p>
-                </div>
-                <div class="stat-item">
-                    <h3>3</h3>
-                    <p>Rukun Warga</p>
-                </div>
-                <div class="stat-item">
-                    <h3>350</h3>
-                    <p>Kepala Keluarga</p>
+            <div class="container">
+                <h2>Data Desa Banyusri</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>1,250</h3>
+                        <p>Jumlah Penduduk</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>8</h3>
+                        <p>Rukun Tetangga</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>3</h3>
+                        <p>Rukun Warga</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>350</h3>
+                        <p>Kepala Keluarga</p>
+                    </div>
                 </div>
             </div>
         </section>
-    </div>
+    </main>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="index.html">Beranda</a>
-                <a href="profil.html">Profil Desa</a>
-                <a href="pengaduan.html">Pengaduan</a>
-                <a href="kontak.html">Kontak</a>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="index.html">Beranda</a>
+                    <a href="profil.html">Profil Desa</a>
+                    <a href="pengaduan.html">Pengaduan</a>
+                    <a href="kontak.html">Kontak</a>
+                </div>
+                <p>&copy; 2025 Desa Banyusri | KKN Tematik Periode 7 Kelompok 22 Universitas Duta Bangsa</p>
+                <p>Website Resmi Pemerintah Desa Banyusri</p>
             </div>
-            <p>&copy; 2025 Desa Banyusri | KKN Tematik Periode 7 Kelompok 22 Universitas Duta Bangsa</p>
-            <p>Website Resmi Pemerintah Desa Banyusri</p>
         </div>
     </footer>
-    <script>        // Back to top button
+
+    <script>
+        // Back to top button
         const backToTopButton = document.createElement('button');
         backToTopButton.innerHTML = '↑';
         backToTopButton.style.cssText = `
@@ -149,6 +156,6 @@
         backToTopButton.addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-        </script>
+    </script>
 </body>
 </html>

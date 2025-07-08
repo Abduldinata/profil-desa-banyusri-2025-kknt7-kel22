@@ -163,6 +163,26 @@ nav {
     color: #3498db;
 }
 
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.container h2 {
+    color: #f3f2f2;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+   
+}
+.container h3 {
+    color: #070707;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+   
+}
+
 /* =============================================================================
    Main Content Layout
    ============================================================================= */
@@ -631,14 +651,14 @@ nav {
   pointer-events: auto;
   padding: 12px 16px;
   border-radius: 8px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px; /* << kecil dan elegan */
   margin-bottom: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.6s ease-in-out;
-  line-height: 1.4;
+  line-height: 1.8;
   text-align: center;
 }
 
